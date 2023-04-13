@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Alert, Box, Button } from "@mantine/core";
+import { motion } from "framer-motion";
 
 function App() {
   const [display, show] = useState(false);
@@ -9,7 +10,7 @@ function App() {
   };
 
   return (
-    <Box
+    <motion.div
       style={{
         height: "100vh",
         width: "100vw",
@@ -17,6 +18,13 @@ function App() {
         alignItems: "center",
         justifyContent: "center",
         flexDirection: "column",
+      }}
+      initial={{ scale: 0 }}
+      animate={{ rotate: 360, scale: 1 }}
+      transition={{
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
       }}
     >
       <Button
@@ -33,7 +41,7 @@ function App() {
           Hello World!
         </Alert>
       ) : null}
-    </Box>
+    </motion.div>
   );
 }
 
