@@ -1,0 +1,23 @@
+.modules_menu {
+  position: relative;
+  top: 50%;
+  left: 20px;
+  transform: translateY(-50%);
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  border: 1px solid blue;
+  height: 60% !important;
+  width: 60% !important;
+}
+
+@media (min-width: 1500px) {
+  .modules_menu {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1920px) {
+  .modules_menu {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

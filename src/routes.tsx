@@ -1,31 +1,35 @@
 import App from "./App";
-import Cms from "./containers/Cms"
+import Cms from "./containers/Cms";
 import { createBrowserRouter } from "react-router-dom";
+import MainScreen from "./containers/MainScreen";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    children:[
+    children: [
       {
         path: "cms",
         element: <Cms />,
-        children:[
+        children: [
           {
-            path:"kiosks",
+            path: "kiosks",
             element: <div>kiosk</div>,
           },
           {
-            path:"modules",
+            path: "modules",
             element: <div>modules</div>,
           },
           {
-            path:"assign",
+            path: "assign",
             element: <div>assign</div>,
-          }
-        ]
+          },
+        ],
       },
-    ]
+      {
+        path: "main",
+        element: <MainScreen />,
+      },
+    ],
   },
-
 ]);
