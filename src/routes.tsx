@@ -27,7 +27,7 @@ export const router = createBrowserRouter([
         ],
       },
       {
-        path: "main",
+        path: "main/:kiosk_id",
         element: <MainScreen />,
       },
     ],

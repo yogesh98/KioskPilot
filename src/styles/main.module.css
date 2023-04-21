@@ -19,3 +19,11 @@
   width: 100%;
   border: 1px solid green;
 }
+
+.carousel {
+  height: 100% !important;
+}
+
+.slide {
+  height: 100% !important;
+}
