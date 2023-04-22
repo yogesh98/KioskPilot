@@ -74,7 +74,8 @@ const MainScreen = () => {
   const changeSlide = (i: number) => {
     if (!embla) return;
     embla.scrollTo(i);
-    autoplay.current.stop;
+    autoplay.current.stop();
+    setTimeout(autoplay.current.reset, 30000);
     setSlide(i);
   };
 
