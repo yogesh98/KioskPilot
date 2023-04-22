@@ -1,12 +1,12 @@
+import { Carousel, Embla } from "@mantine/carousel";
 import { Box, Image } from "@mantine/core";
-import style from "../styles/main.module.css";
-import ModuleNav from "../component/ModuleNav";
-import { useParams } from "react-router-dom";
-import pb from "../lib/pocketbase";
-import { useEffect, useRef, useState } from "react";
-import { MainScreenData } from "../lib/types";
-import { Carousel } from "@mantine/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import { useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
+import ModuleNav from "../component/ModuleNav";
+import pb from "../lib/pocketbase";
+import { MainScreenData } from "../lib/types";
+import style from "../styles/main.module.css";
 
 const imageStyle = {
   root: { height: "100%", width: "auto !important" },
@@ -18,6 +18,8 @@ const MainScreen = () => {
   const { kiosk_id } = useParams();
 
   const [data, setData] = useState<MainScreenData>();
+  const [embla, setEmbla] = useState<Embla>();
+  const [slide, setSlide] = useState<number>(0);
   const autoplay = useRef(Autoplay({ delay: 5000 }));
   // const [displayedModule, ]
 
@@ -57,6 +59,25 @@ const MainScreen = () => {
     });
   };
 
+  useEffect(() => {
+    if (embla) {
+      embla.on("scroll", onSlideChange);
+    }
+  }, [embla]);
+
+  const onSlideChange = () => {
+    if (!embla) return;
+    const index: Array<number> = embla.slidesInView();
+    if (index.length === 1) setSlide(index[0]);
+  };
+
+  const changeSlide = (i: number) => {
+    if (!embla) return;
+    embla.scrollTo(i);
+    autoplay.current.stop;
+    setSlide(i);
+  };
+
   return (
     <Box className={style.container}>
       <Box className={style.main_pic}>
@@ -66,6 +87,8 @@ const MainScreen = () => {
           plugins={[autoplay.current]}
           onMouseEnter={autoplay.current.stop}
           onMouseLeave={autoplay.current.reset}
+          withControls={false}
+          getEmblaApi={setEmbla}
         >
           {data?.module &&
             data.module.map((d) => (
@@ -90,7 +113,7 @@ const MainScreen = () => {
         </Carousel>
       </Box>
       <Box className={style.kiosk_module_section}>
-        <ModuleNav modules={data?.module} />
+        <ModuleNav modules={data?.module} index={slide} changeSlide={changeSlide} />
       </Box>
     </Box>
   );

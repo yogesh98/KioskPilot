@@ -3,11 +3,14 @@
   top: 50%;
   left: 20px;
   transform: translateY(-50%);
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  border: 1px solid blue;
+  /* display: grid; */
+  /* grid-template-columns: repeat(1, 1fr); */
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   height: 60% !important;
   width: 60% !important;
+  justify-content: start;
 }
 
 .nav_items {
@@ -18,6 +21,16 @@
   align-items: center;
   font-size: 3rem;
   gap: 2rem;
+  padding-left: 2px;
+}
+
+.selector {
+  position: absolute;
+  z-index: -1000;
+  border-radius: 10px;
+  width: 100%;
+  height: inherit;
+  background-color: rgba(233, 150, 122, 0.6);
 }
 
 @media (min-width: 1500px) {
