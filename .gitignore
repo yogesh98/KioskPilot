@@ -24,7 +24,6 @@ dist-ssr
 *.sw?
 
 # Pocketbase files
-pb_data
 pb_migrations
 pocketbase
 

@@ -1,34 +1,34 @@
 .modules_menu {
   position: relative;
-  top: 50%;
-  left: 20px;
+  top: 100% !important;
+  left: 0px;
   transform: translateY(-50%);
-  /* display: grid; */
-  /* grid-template-columns: repeat(1, 1fr); */
+  width: 100vw !important;
+  height: 150px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: 20px;
-  height: 60% !important;
-  width: 60% !important;
-  justify-content: start;
+  justify-content: space-evenly;
+  transform: translateY(-100%);
+  background: #fff;
 }
 
 .nav_items {
-  height: 6rem !important;
-  width: 100%;
+  height: 100px;
+  width: 100px;
   max-width: 100%;
   display: flex;
+  justify-content: center;
   align-items: center;
   font-size: 3rem;
-  gap: 2rem;
-  padding-left: 2px;
 }
 
 .selector {
   position: absolute;
   z-index: -1000;
   border-radius: 10px;
-  width: 100%;
+  width: 100px;
   height: inherit;
   background-color: rgba(233, 150, 122, 0.6);
 }

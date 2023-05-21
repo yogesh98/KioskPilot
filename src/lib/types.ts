@@ -1,6 +1,6 @@
 import { Record } from "pocketbase";
 
-export type kiosk = Record & {
+export type kiosk = {
   collectionId: string;
   collectionName: string;
   created: string;

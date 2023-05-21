@@ -95,12 +95,21 @@ const MainScreen = () => {
             data.module.map((d) => (
               <Carousel.Slide className={style.slide}>
                 {d.type === "image" ? (
-                  <Image
-                    styles={() => imageStyle}
-                    src={`${import.meta.env.VITE_POCKETBASE_URL}/api/files/modules/${d.id}/${d.module}`}
-                    alt={d.title}
-                    height={"100%"}
-                  />
+                  <Box className={style.carousel_img_box}>
+                    <Image
+                      styles={() => imageStyle}
+                      className={style.bg}
+                      src={`${import.meta.env.VITE_POCKETBASE_URL}/api/files/modules/${d.id}/${d.module}`}
+                      alt={d.title}
+                      height={"100%"}
+                    />
+                    <Image
+                      src={`${import.meta.env.VITE_POCKETBASE_URL}/api/files/modules/${d.id}/${d.module}`}
+                      alt={d.title}
+                      width={"100%"}
+                    />
+                    <Box className={style.title}>{d.title}</Box>
+                  </Box>
                 ) : (
                   <video height={"auto"}>
                     <source

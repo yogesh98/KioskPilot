@@ -16,19 +16,14 @@ const ModuleNav: FC<Props> = ({ modules, index, changeSlide }) => {
       {modules &&
         modules.map((v, i) => (
           <Box key={i} className={style.nav_items} onClick={() => changeSlide(i)}>
-            <motion.div
-              initial={{ marginLeft: 10 }}
-              animate={i === index ? { marginLeft: 20 } : {}}
-              transition={{ type: "spring" }}
-            >
+            <motion.div transition={{ type: "spring" }}>
               <Image
                 src={`${import.meta.env.VITE_POCKETBASE_URL}/api/files/modules/${v.id}/${v.icon}`}
                 alt={v.icon_text}
-                height={50}
-                width={50}
+                height={75}
+                width={75}
               />
             </motion.div>
-            <Text>{v.title}</Text>
             {i === index ? <motion.div layoutId={"selector"} className={style.selector} /> : null}
           </Box>
         ))}
