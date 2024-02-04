@@ -17,15 +17,15 @@ import {
     FormControl,
     FormLabel,
     Input,
-    Flex,
-    Spacer,
-    Box,
 } from '@chakra-ui/react'
   
 import { ChevronDownIcon, AddIcon } from '@chakra-ui/icons'
 import { useAppContent } from '@yogeshp98/pocketbase-react'
-import { useParams } from 'react-router-dom';
-  
+
+/*
+    TODO:
+    Figure out why subscribe adds so many records to the array.
+*/
   
 export default function KioskPickerComponent({
     currentKioskId,
@@ -34,7 +34,6 @@ export default function KioskPickerComponent({
     const [currentKiosk, setCurrentKiosk] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { records: kiosks, actions } = useAppContent('kiosks', true);
-    const params = useParams();
 
     useEffect(() => {
         actions.subscribe();
