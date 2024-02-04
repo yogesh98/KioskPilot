@@ -34,14 +34,19 @@ export default function KioskPickerComponent({
     const [currentKiosk, setCurrentKiosk] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { records: kiosks, actions } = useAppContent('kiosks', true);
-    actions.subscribe();
     const params = useParams();
 
     useEffect(() => {
-        console.log(params);
-        console.log(kiosks);
+        actions.subscribe();
+    });
+
+    useEffect(() => {
         setCurrentKiosk(kiosks.find((kiosks) => kiosks.id === currentKioskId))
     },[kiosks, currentKioskId]);
+
+    useEffect(() => {
+        console.count("kiosks");
+    }, [kiosks])
 
     const createKiosk = async (e) => {
         e.preventDefault();
@@ -71,8 +76,8 @@ export default function KioskPickerComponent({
 
                 {currentKiosk ? currentKiosk.name : "Pick a Kiosk"}
             </MenuButton>
-            <MenuList>
-                {kiosks.map((kiosk) => <MenuItem onClick={() => onChange(kiosk.id)}>{kiosk.name}</MenuItem>)}
+            <MenuList overflowY={'scroll'}>
+                {kiosks.map((kiosk) => <MenuItem key={kiosk.id} onClick={() => onChange(kiosk.id)}>{kiosk.name}</MenuItem>)}
                 <MenuDivider />
                 <MenuItem onClick={onOpen}> <AddIcon mr={2}/> Create</MenuItem>
             </MenuList>

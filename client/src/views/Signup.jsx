@@ -56,6 +56,7 @@ const Signup = () => {
           }
         } catch (error) {
           try {
+            console.error(error)
             const name = Object.keys(error.data.data)[0]
             const message = error.data.data[name].message
             setError(name.charAt(0).toUpperCase() + name.slice(1)+": "+message)
