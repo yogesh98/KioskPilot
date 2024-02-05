@@ -19,7 +19,7 @@ import {
 
 import { MoonIcon, SunIcon, HamburgerIcon } from '@chakra-ui/icons'
 import { useAuth } from '@yogeshp98/pocketbase-react'
-import KioskPickerComponent from '../Common/KioskPickerComponent'
+import ConfigurationPickerComponent from '../Common/ConfigurationPickerComponent'
 import { useNavigate, useParams } from 'react-router-dom'
 
 
@@ -56,7 +56,7 @@ export default function Navbar() {
             <Text>Kiosk Pilot</Text>
           </Stack>
           <Box>
-            <KioskPickerComponent currentKioskId={params.kioskId} onChange={(kioskId) => navigate("cms/"+kioskId)}/>
+            <ConfigurationPickerComponent currentConfigurationId={params.configurationId} onChange={(configurationId) => navigate("cms/"+configurationId)}/>
           </Box>
           <Stack alignItems={'center'} direction={'row'} spacing={2}>
             <Button onClick={toggleColorMode}>

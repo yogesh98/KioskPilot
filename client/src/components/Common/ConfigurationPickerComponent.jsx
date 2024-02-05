@@ -25,32 +25,38 @@ import { useAppContent } from '@yogeshp98/pocketbase-react'
 /*
     TODO:
     Figure out why subscribe adds so many records to the array.
+    Instead of by kiosk do by configuration and push it to the kiosk
 */
   
-export default function KioskPickerComponent({
-    currentKioskId,
+export default function ConfigurationPickerComponent({
+    currentConfigurationId,
     onChange,
 }) {
-    const [currentKiosk, setCurrentKiosk] = useState(null);
+    const [currentConfiguration, setCurrentConfiguration] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { records: kiosks, actions } = useAppContent('kiosks', true);
+    const { records: configurations, actions, isSubscribed } = useAppContent('configurations');
+    useEffect(() => {
+        if(!isSubscribed){
+            console.count("subscribe")
+            actions.subscribe();
+        }
+        return () => {
+            console.count("unsubscribe")
+            actions.unsubscribe()
+        }
+    },[]);
 
     useEffect(() => {
-        actions.subscribe();
-    });
-
-    useEffect(() => {
-        setCurrentKiosk(kiosks.find((kiosks) => kiosks.id === currentKioskId))
-    },[kiosks, currentKioskId]);
-
-    useEffect(() => {
-        console.count("kiosks");
-    }, [kiosks])
+        setCurrentConfiguration(configurations?.find((configurations) => configurations.id === currentConfigurationId))
+    },[configurations, currentConfigurationId]);
 
     const createKiosk = async (e) => {
         e.preventDefault();
         const name = document.getElementById('nameInput').value;
-        const record = await actions.create({"name": name});
+        const height = document.getElementById('heightInput').value;
+        const width = document.getElementById('widthInput').value;
+        
+        const record = await actions.create({"name": name, "height": height, "width": width});
         onClose();
         if(onChange && record) onChange(record.id);
     }
@@ -73,10 +79,10 @@ export default function KioskPickerComponent({
                 _focus={{ boxShadow: 'outline' }}
             >
 
-                {currentKiosk ? currentKiosk.name : "Pick a Kiosk"}
+                {currentConfiguration ? currentConfiguration.name + " (" + currentConfiguration.width + "x" + currentConfiguration.height + ")" : "Pick a configuration"}
             </MenuButton>
             <MenuList overflowY={'scroll'}>
-                {kiosks.map((kiosk) => <MenuItem key={kiosk.id} onClick={() => onChange(kiosk.id)}>{kiosk.name}</MenuItem>)}
+                {configurations?.map((configuration) => <MenuItem key={configuration.id} onClick={() => onChange(configuration.id)}>{configuration.name + " (" + configuration.width + "x" + configuration.height + ")"}</MenuItem>)}
                 <MenuDivider />
                 <MenuItem onClick={onOpen}> <AddIcon mr={2}/> Create</MenuItem>
             </MenuList>
@@ -84,13 +90,21 @@ export default function KioskPickerComponent({
         <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader>Create a new Kiosk</ModalHeader>
+                <ModalHeader>Create a new Configuration</ModalHeader>
                 <ModalCloseButton />
                 <form>
                     <ModalBody>
-                        <FormControl isRequired>
+                        <FormControl mb={2} isRequired>
                             <FormLabel>Name</FormLabel>
                             <Input id='nameInput' />
+                        </FormControl>
+                        <FormControl mb={2} isRequired>
+                            <FormLabel>Width</FormLabel>
+                            <Input id='widthInput' />
+                        </FormControl>
+                        <FormControl mb={2} isRequired>
+                            <FormLabel>Height</FormLabel>
+                            <Input id='heightInput' />
                         </FormControl>
                     </ModalBody>
 

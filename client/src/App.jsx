@@ -10,7 +10,8 @@ import BaseLayout from './layouts/BaseLayout';
 import RequireAuthLayout from './layouts/RequireAuthLayout';
 import { Login } from './views/Login';
 import DashboardLayout from './layouts/DashboardLayout';
-import Cms from './views/Cms';
+import ConfigurationEditor from './views/ConfigurationEditor';
+import TestComponent from './views/Test';
 
 const Signup = React.lazy(() => import('./views/Signup'));
 const NotFound = React.lazy(() => import('./views/NotFound'));
@@ -25,7 +26,7 @@ function App() {
           <Route path="signup" element={<Signup/>}/>
           <Route path="dashboard/*" element={<RequireAuthLayout redirectTo="/login"/>}>
             <Route path="" element={<DashboardLayout/>}>
-              <Route path="cms/:kioskId?" element={<Cms/>}/>
+              <Route path="cms/:configurationId?" element={<ConfigurationEditor/>}/>
             </Route>
           </Route>
           <Route path="*" element={<NotFound />}/>
