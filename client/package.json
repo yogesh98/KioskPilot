@@ -17,6 +17,7 @@
     "@yogeshp98/pocketbase-react": "^0.21.0",
     "framer-motion": "^10.18.0",
     "localforage": "^1.10.0",
+    "lodash": "^4.17.21",
     "match-sorter": "^6.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

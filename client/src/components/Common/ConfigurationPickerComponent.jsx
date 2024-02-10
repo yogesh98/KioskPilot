@@ -37,11 +37,9 @@ export default function ConfigurationPickerComponent({
     const { records: configurations, actions, isSubscribed } = useAppContent('configurations');
     useEffect(() => {
         if(!isSubscribed){
-            console.count("subscribe")
             actions.subscribe();
         }
         return () => {
-            console.count("unsubscribe")
             actions.unsubscribe()
         }
     },[]);

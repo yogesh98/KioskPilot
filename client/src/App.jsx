@@ -12,6 +12,7 @@ import { Login } from './views/Login';
 import DashboardLayout from './layouts/DashboardLayout';
 import ConfigurationEditor from './views/ConfigurationEditor';
 import TestComponent from './views/Test';
+import ScaledLayout from './views/Test';
 
 const Signup = React.lazy(() => import('./views/Signup'));
 const NotFound = React.lazy(() => import('./views/NotFound'));
@@ -25,10 +26,12 @@ function App() {
           <Route path="login" element={<Login/>}/>
           <Route path="signup" element={<Signup/>}/>
           <Route path="dashboard/*" element={<RequireAuthLayout redirectTo="/login"/>}>
-            <Route path="" element={<DashboardLayout/>}>
-              <Route path="cms/:configurationId?" element={<ConfigurationEditor/>}/>
+            <Route path="cms/*" element={<DashboardLayout/>}>
+              <Route path=":configurationId" element={<ConfigurationEditor/>}/>
+              <Route path="" element={<div/>}/>
             </Route>
           </Route>
+          <Route path='test' element={<ScaledLayout />}/>
           <Route path="*" element={<NotFound />}/>
         </Route>
       </Routes>

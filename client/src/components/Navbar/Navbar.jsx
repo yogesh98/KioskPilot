@@ -56,7 +56,7 @@ export default function Navbar() {
             <Text>Kiosk Pilot</Text>
           </Stack>
           <Box>
-            <ConfigurationPickerComponent currentConfigurationId={params.configurationId} onChange={(configurationId) => navigate("cms/"+configurationId)}/>
+            <ConfigurationPickerComponent currentConfigurationId={params.configurationId} onChange={(configurationId) => navigate(configurationId)}/>
           </Box>
           <Stack alignItems={'center'} direction={'row'} spacing={2}>
             <Button onClick={toggleColorMode}>
