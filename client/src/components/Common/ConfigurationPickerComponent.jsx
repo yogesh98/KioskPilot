@@ -53,8 +53,10 @@ export default function ConfigurationPickerComponent({
         const name = document.getElementById('nameInput').value;
         const height = document.getElementById('heightInput').value;
         const width = document.getElementById('widthInput').value;
+        const rows = Math.floor(height / 10);
+        const columns = Math.floor(width / 10);
         
-        const record = await actions.create({"name": name, "height": height, "width": width});
+        const record = await actions.create({"name": name, "height": height, "width": width, "rows": rows, "columns": columns});
         onClose();
         if(onChange && record) onChange(record.id);
     }

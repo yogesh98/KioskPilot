@@ -20,13 +20,13 @@ export default class ScaledLayout extends React.PureComponent {
     super(props);
 
     const layout = this.generateLayout();
-    this.state = { layout };
+    this.state = { "layout": {} };
   }
 
   generateDOM() {
     return _.map(_.range(this.props.items), function(i) {
       return (
-        <Box key={i} borderWidth={12}>
+        <Box key={i} borderWidth={2}>
           <span className="text">{i}</span>
         </Box>
       );
@@ -35,6 +35,7 @@ export default class ScaledLayout extends React.PureComponent {
 
   generateLayout() {
     const p = this.props;
+    console.log(p);
     return _.map(new Array(p.items), function(item, i) {
       const y = _.result(p, "y") || Math.ceil(Math.random() * 4) + 1;
       return {
@@ -60,7 +61,9 @@ export default class ScaledLayout extends React.PureComponent {
                 onLayoutChange={this.onLayoutChange}
                 {...this.props}
                 >
-                    {this.generateDOM()}
+                    <Box key={1} borderWidth={2}>
+                        <span className="text">{1}</span>
+                    </Box>
                 </ReactGridLayout>
             </div>
         </Box>
