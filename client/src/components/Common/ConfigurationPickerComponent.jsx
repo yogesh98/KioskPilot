@@ -56,7 +56,7 @@ export default function ConfigurationPickerComponent({
         const rows = Math.floor(height / 10);
         const columns = Math.floor(width / 10);
         
-        const record = await actions.create({"name": name, "height": height, "width": width, "rows": rows, "columns": columns});
+        const record = await actions.create({"name": name, "height": height, "width": width, "rows": rows, "columns": columns, "pages": [{"name": "home"}]});
         onClose();
         if(onChange && record) onChange(record.id);
     }

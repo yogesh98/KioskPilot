@@ -13,6 +13,7 @@ import DashboardLayout from './layouts/DashboardLayout';
 import ConfigurationEditor from './views/ConfigurationEditor';
 import TestComponent from './views/Test';
 import ScaledLayout from './views/Test';
+import ConfigurationViewer from './views/ConfigurationViewer';
 
 const Signup = React.lazy(() => import('./views/Signup'));
 const NotFound = React.lazy(() => import('./views/NotFound'));
@@ -31,6 +32,7 @@ function App() {
               <Route path="" element={<div/>}/>
             </Route>
           </Route>
+          <Route path='kiosk/:kioskId/:pageIndex?' element={<ConfigurationViewer />} />
           <Route path='test' element={<ScaledLayout />}/>
           <Route path="*" element={<NotFound />}/>
         </Route>
