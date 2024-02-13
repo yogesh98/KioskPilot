@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box } from "@chakra-ui/react";
+import { Box, Flex } from "@chakra-ui/react";
 import { useClientContext } from "@yogeshp98/pocketbase-react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -46,9 +46,17 @@ export default function ConfigurationViewer() {
           isResizable={false}
         >
           <Box key={1} borderWidth={2}>
-            <div style={{transform: 'scale(1)'}}>
-              <span className="text">{1}</span>
-            </div>
+            <Flex
+              id="container_flex"
+              h={'100%'}
+              w={'100%'}
+              alignItems={'center'}
+              justifyContent={'center'}
+            >
+              <div> 
+                  <span className="text">{1}</span>
+              </div>
+            </Flex>
           </Box>
           <Box key={2} borderWidth={2}>
               <span className="text">{2}</span>
