@@ -25,6 +25,7 @@ export default function ConfigurationEditor() {
     const [scaleFactor, setScaleFactor] = useState(1);
     const [loading, setLoading] = useState(true);
     const {records: kiosks} = useAppContent('kiosks', true);
+    let dragging = null;
 
     useEffect(() => {
         setLoading(true);
@@ -61,6 +62,11 @@ export default function ConfigurationEditor() {
         newPages[currentPage] = {...newPages[currentPage], "layout": layout}
         setPages(newPages);
     }
+
+    const onDrop = (layout, layoutItem, _event) => {
+        console.log(layout);
+        alert(`Dropped element props:\n${JSON.stringify(layoutItem, ['x', 'y', 'w', 'h'], 2)}`);
+    };
 
     const savePages = () => {
         setLoading(true);
@@ -112,7 +118,15 @@ export default function ConfigurationEditor() {
                         flexGrow={1}
                         {...widget_common_styles}
                     >
-                        
+                        <div
+                            key={'test'}
+                            className="droppable-element"
+                            draggable={true}
+                            onDragStart={(e) => dragging = 3}
+                            unselectable="on"
+                        >
+                            Droppable Element (Drag me!)
+                        </div>
                     </Box>
                 </Stack>                
                 <Flex id="layoutContainer" flexGrow={1} alignItems={'center'} justifyContent={'center'}>
@@ -126,6 +140,7 @@ export default function ConfigurationEditor() {
                                     layout={pages[currentPage]?.layout}
                                     onDragStop={updateLayoutOnPages}
                                     onResizeStop={updateLayoutOnPages}
+                                    onDrop={onDrop}
                                     compactType={null}
                                     cols={config.columns}
                                     rows={config.rows}
@@ -134,6 +149,7 @@ export default function ConfigurationEditor() {
                                     containerPadding={[0,0]}
                                     margin={[0,0]}
                                     allowOverlap={true}
+                                    isDroppable={true}
                                 >
                                     <Box key={1} borderWidth={2}>
                                         <Flex
