@@ -1,7 +1,12 @@
+import React, { useEffect, useState } from "react";
 import { Box } from "@chakra-ui/react";
 import { useClientContext } from "@yogeshp98/pocketbase-react";
-import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
+import RGL, { WidthProvider } from "react-grid-layout";
+import 'react-grid-layout/css/styles.css';
+import 'react-resizable/css/styles.css';
+const ReactGridLayout = WidthProvider(RGL);
 
 export default function ConfigurationViewer() {
     const params = useParams();
@@ -15,15 +20,41 @@ export default function ConfigurationViewer() {
                 setConfig(currentConfig);
                 if(!params.pageIndex) navigate('0');
             });
-            pbClient.collection('configurations').subscribe(kiosk.configuration, (updatedConfig) => setConfig(updatedConfig));
+            pbClient.collection('configurations').subscribe(kiosk.configuration, (updatedConfig) => setConfig(updatedConfig?.record));
         });
 
         return () => pbClient.collection('configurations').unsubscribe();
     },[pbClient, params.kioskId]);
-
+    console.log(config);
     return (
-      <Box align="center" justify="center" h="100%">
-        Config Viewer
-      </Box>
+    <>
+      {config  ? <Box align="center" justify="center" h={config.height} w={config.width}>
+        <ReactGridLayout
+          className="layout"
+          width={config.width}
+          height={config.height}
+          layout={config.pages[params.pageIndex]?.layout}
+          compactType={null}
+          cols={config.columns}
+          rows={config.rows}
+          maxRows={config.rows}
+          rowHeight={10}
+          containerPadding={[0,0]}
+          margin={[0,0]}
+          allowOverlap={true}
+          isDraggable={false}
+          isResizable={false}
+        >
+          <Box key={1} borderWidth={2}>
+            <div style={{transform: 'scale(1)'}}>
+              <span className="text">{1}</span>
+            </div>
+          </Box>
+          <Box key={2} borderWidth={2}>
+              <span className="text">{2}</span>
+          </Box>
+        </ReactGridLayout>
+      </Box> : null }
+    </>
     );
   }

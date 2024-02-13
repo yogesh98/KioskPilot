@@ -80,7 +80,8 @@ export default function ConfigurationEditor() {
 
     const adjustedWidth = config.width ? config.width * scaleFactor : "auto";
     const adjustedHeight = config.height ? config.height * scaleFactor : "auto";
-
+    const scaleFactorAsPercentage = (scaleFactor > 1 ? 1 : -1) * (scaleFactor * 100);
+    console.log(scaleFactorAsPercentage);
     return (
         <>
             <Flex
@@ -124,6 +125,7 @@ export default function ConfigurationEditor() {
                                     height={adjustedHeight}
                                     layout={pages[currentPage]?.layout}
                                     onDragStop={updateLayoutOnPages}
+                                    onResizeStop={updateLayoutOnPages}
                                     compactType={null}
                                     cols={config.columns}
                                     rows={config.rows}
@@ -134,7 +136,9 @@ export default function ConfigurationEditor() {
                                     allowOverlap={true}
                                 >
                                     <Box key={1} borderWidth={2}>
-                                        <span className="text">{1}</span>
+                                        <div style={{transform: 'scale('+scaleFactor+')'}}>
+                                            <span className="text">{1}</span>
+                                        </div>
                                     </Box>
                                     <Box key={2} borderWidth={2}>
                                         <span className="text">{2}</span>
