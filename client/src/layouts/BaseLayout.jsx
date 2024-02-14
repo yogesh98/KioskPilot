@@ -7,7 +7,7 @@ export default function BaseLayout() {
 	const location = useLocation();
 	useEffect(() => {
 		if (location.pathname === "/") {
-			navigate("/not_found");
+			navigate("/login");
 		}
 	});
 

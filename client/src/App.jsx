@@ -6,15 +6,14 @@ import {
 
 import './App.css'
 
-import BaseLayout from './layouts/BaseLayout';
-import RequireAuthLayout from './layouts/RequireAuthLayout';
-import { Login } from './views/Login';
-import DashboardLayout from './layouts/DashboardLayout';
-import ConfigurationEditor from './views/ConfigurationEditor';
-import TestComponent from './views/Test';
 import ScaledLayout from './views/Test';
-import ConfigurationViewer from './views/ConfigurationViewer';
 
+const BaseLayout = React.lazy(() => import('./layouts/BaseLayout'));
+const RequireAuthLayout = React.lazy(() => import('./layouts/RequireAuthLayout'));
+const DashboardLayout = React.lazy(() => import('./layouts/DashboardLayout'));
+const ConfigurationEditor = React.lazy(() => import('./views/ConfigurationEditor'));
+const ConfigurationViewer = React.lazy(() =>  import('./views/ConfigurationViewer'));
+const Login = React.lazy(() => import('./views/Login'));
 const Signup = React.lazy(() => import('./views/Signup'));
 const NotFound = React.lazy(() => import('./views/NotFound'));
 

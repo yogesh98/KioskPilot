@@ -22,7 +22,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useAuth } from '@yogeshp98/pocketbase-react'
 import { useNavigate } from 'react-router-dom'
 
-export const Login = () => {
+export default function Login() {
     const logo = useColorModeValue("/kiosk_pilot_logo_black.png", "/kiosk_pilot_logo_white.png")
     const emailRef = useRef(null)
     const passwordRef = useRef(null)
@@ -33,7 +33,7 @@ export const Login = () => {
     const [error, setError] = useState("")
     useEffect(() => {
       if(isSignedIn){
-        navigate("/dashboard/")
+        navigate("/dashboard/cms");
       }
     })
     const handleSubmit = async (e) => {

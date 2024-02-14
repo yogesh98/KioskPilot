@@ -45,22 +45,7 @@ export default function ConfigurationViewer() {
           isDraggable={false}
           isResizable={false}
         >
-          <Box key={1} borderWidth={2}>
-            <Flex
-              id="container_flex"
-              h={'100%'}
-              w={'100%'}
-              alignItems={'center'}
-              justifyContent={'center'}
-            >
-              <div> 
-                  <span className="text">{1}</span>
-              </div>
-            </Flex>
-          </Box>
-          <Box key={2} borderWidth={2}>
-              <span className="text">{2}</span>
-          </Box>
+
         </ReactGridLayout>
       </Box> : null }
     </>

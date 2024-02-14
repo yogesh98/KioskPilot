@@ -4,6 +4,9 @@ import { ArrowRightIcon } from "@chakra-ui/icons";
 import { useAppContent, useClientContext } from "@yogeshp98/pocketbase-react";
 import { useParams } from "react-router-dom";
 
+import componentMap from "../components/Kiosk/ComponentMap";
+import TestComponent from "../components/Kiosk/Components/TestComponent";
+
 import RGL, { WidthProvider } from "react-grid-layout";
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
@@ -16,7 +19,7 @@ export default function ConfigurationEditor() {
         borderWidth: 2,
         bg: useColorModeValue('gray.100', 'gray.900'),
     };
-    
+    const DynamicComponent = componentMap['Test'];
     const pbClient = useClientContext();
     const params = useParams();
     const [config, setConfig] = useState({});
@@ -58,14 +61,18 @@ export default function ConfigurationEditor() {
 
 
     const updateLayoutOnPages = (layout) => {
+        console.log(layout);
         let newPages = [...pages];
         newPages[currentPage] = {...newPages[currentPage], "layout": layout}
         setPages(newPages);
     }
 
     const onDrop = (layout, layoutItem, _event) => {
-        console.log(layout);
-        alert(`Dropped element props:\n${JSON.stringify(layoutItem, ['x', 'y', 'w', 'h'], 2)}`);
+        let newLayout = pages[currentPage].layout ? [...pages[currentPage].layout] : [];
+        layoutItem['i'] = dragging+'_'+newLayout.length;
+        dragging = null;
+        newLayout.push(layoutItem);
+        updateLayoutOnPages(newLayout);
     };
 
     const savePages = () => {
@@ -86,8 +93,6 @@ export default function ConfigurationEditor() {
 
     const adjustedWidth = config.width ? config.width * scaleFactor : "auto";
     const adjustedHeight = config.height ? config.height * scaleFactor : "auto";
-    const scaleFactorAsPercentage = (scaleFactor > 1 ? 1 : -1) * (scaleFactor * 100);
-    console.log(scaleFactorAsPercentage);
     return (
         <>
             <Flex
@@ -118,15 +123,21 @@ export default function ConfigurationEditor() {
                         flexGrow={1}
                         {...widget_common_styles}
                     >
-                        <div
-                            key={'test'}
-                            className="droppable-element"
-                            draggable={true}
-                            onDragStart={(e) => dragging = 3}
-                            unselectable="on"
-                        >
-                            Droppable Element (Drag me!)
-                        </div>
+                        {
+                            Object.keys(componentMap).map((componentKey) => {
+                                return (
+                                    <div
+                                        key={componentKey}
+                                        className="droppable-element"
+                                        draggable={true}
+                                        onDragStart={(e) => dragging = componentKey}
+                                        unselectable="on"
+                                    >
+                                        {componentKey}
+                                    </div>
+                                );
+                            })
+                        }
                     </Box>
                 </Stack>                
                 <Flex id="layoutContainer" flexGrow={1} alignItems={'center'} justifyContent={'center'}>
@@ -135,6 +146,7 @@ export default function ConfigurationEditor() {
                             <Box id="LayoutBox" borderWidth={2} w={adjustedWidth} h={adjustedHeight}>
                                 {currentPage != '' && currentPage >= 0 ? <ReactGridLayout
                                     className="layout"
+                                    autoSize={false}
                                     width={adjustedWidth}
                                     height={adjustedHeight}
                                     layout={pages[currentPage]?.layout}
@@ -150,8 +162,22 @@ export default function ConfigurationEditor() {
                                     margin={[0,0]}
                                     allowOverlap={true}
                                     isDroppable={true}
+                                    style={{
+                                        height: '100%',
+                                        width: '100%',
+                                    }}
                                 >
-                                    <Box key={1} borderWidth={2}>
+                                    {
+                                        pages[currentPage]?.layout?.map((component, index) => {
+                                            const componentName = component['i'].replace('_'+index, '');
+                                            const DyanmicComponent = componentMap[componentName];
+                                            return <Box key={component['i']}>
+                                                    <DyanmicComponent {...component} scaleFactor={scaleFactor}/>
+                                            </Box>
+                                        })
+
+                                    }
+                                    {/* <Box key={1} borderWidth={2}>
                                         <Flex
                                                 id="container_flex"
                                                 h={'100%'}
@@ -166,7 +192,7 @@ export default function ConfigurationEditor() {
                                     </Box>
                                     <Box key={2} borderWidth={2}>
                                         <span className="text">{2}</span>
-                                    </Box>
+                                    </Box> */}
                                 </ReactGridLayout> : <Box>Choose a page to begin</Box>}
                             </Box> 
                             : <Spinner size={'xl'}/>}
