@@ -1,7 +1,17 @@
 import { Box, Flex } from "@chakra-ui/react";
 
+export const propMap = {
+    'text': {
+        'label': 'Text',
+        'inputType': 'input',
+        'componentProps': {
+            'type': 'text',
+            'placeholder': 'Text to show in component',
+        }
+    }
+};
 
-export default function TestComponent({scaleFactor}) {
+export default function TestComponent({scaleFactor, text}) {
     const scaleFactorAsPercentage = (scaleFactor > 1 ? 1 : -1) * (scaleFactor * 100); 
     return (
         <>
@@ -13,7 +23,7 @@ export default function TestComponent({scaleFactor}) {
                 justifyContent={'center'}
             >
                 <div  style={{transform: 'scale('+scaleFactor+') translate(0%, '+scaleFactorAsPercentage+'%)'}}> 
-                    <span className="text">{2}</span>
+                    <span className="text">{text}</span>
                 </div>
             </Flex>
         </>

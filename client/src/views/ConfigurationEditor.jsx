@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Flex, IconButton, Select, Spinner, Stack, Tooltip, useColorModeValue } from '@chakra-ui/react';
-import { ArrowRightIcon } from "@chakra-ui/icons";
+import { Box, Button, Flex, HStack, IconButton, Select, Spinner, Stack, Tooltip, useColorModeValue } from '@chakra-ui/react';
+import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, DeleteIcon, SmallCloseIcon } from "@chakra-ui/icons";
+import { BsFloppy } from "react-icons/bs";
 import { useAppContent, useClientContext } from "@yogeshp98/pocketbase-react";
 import { useParams } from "react-router-dom";
 
 import componentMap from "../components/Kiosk/ComponentMap";
-import TestComponent from "../components/Kiosk/Components/TestComponent";
+import TestComponent from "../components/Kiosk/TestComponent/TestComponent";
 
 import RGL, { WidthProvider } from "react-grid-layout";
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+import PropFormComponent from "../components/Common/PropFormComponent";
 const ReactGridLayout = WidthProvider(RGL);
 
 export default function ConfigurationEditor() {
@@ -19,7 +21,6 @@ export default function ConfigurationEditor() {
         borderWidth: 2,
         bg: useColorModeValue('gray.100', 'gray.900'),
     };
-    const DynamicComponent = componentMap['Test'];
     const pbClient = useClientContext();
     const params = useParams();
     const [config, setConfig] = useState({});
@@ -27,8 +28,9 @@ export default function ConfigurationEditor() {
     const [pages, setPages] = useState([]);
     const [scaleFactor, setScaleFactor] = useState(1);
     const [loading, setLoading] = useState(true);
+    const [selectedComponent, setSelectedComponent] = useState(-1);
     const {records: kiosks} = useAppContent('kiosks', true);
-    let dragging = null;
+    let draggingFromOutside = null;
 
     useEffect(() => {
         setLoading(true);
@@ -60,19 +62,23 @@ export default function ConfigurationEditor() {
     }, [pbClient, params.configurationId]);
 
 
-    const updateLayoutOnPages = (layout) => {
-        console.log(layout);
+    const updateLayoutOnPages = (layout, layoutItem) => {
+        const index = layout.findIndex(item => item['i'] === layoutItem['i']);
+        setSelectedComponent(index);
         let newPages = [...pages];
         newPages[currentPage] = {...newPages[currentPage], "layout": layout}
         setPages(newPages);
     }
 
-    const onDrop = (layout, layoutItem, _event) => {
+    const onDrop = (layout, layoutItem) => {
         let newLayout = pages[currentPage].layout ? [...pages[currentPage].layout] : [];
-        layoutItem['i'] = dragging+'_'+newLayout.length;
-        dragging = null;
+        const uuid = crypto.randomUUID();
+        layoutItem['i'] = draggingFromOutside+'|'+uuid;
+        layoutItem['w'] = Math.floor(config.columns/ 10);
+        layoutItem['h'] = Math.floor(config.rows / 10);
+        draggingFromOutside = null;
         newLayout.push(layoutItem);
-        updateLayoutOnPages(newLayout);
+        updateLayoutOnPages(newLayout, layoutItem);
     };
 
     const savePages = () => {
@@ -82,6 +88,10 @@ export default function ConfigurationEditor() {
             setPages(config.pages);
             setLoading(false);
         })
+    }
+
+    const onUpdatePropValues = (i) => (values) => {
+
     }
 
     const pushToKiosk = () => {
@@ -130,7 +140,7 @@ export default function ConfigurationEditor() {
                                         key={componentKey}
                                         className="droppable-element"
                                         draggable={true}
-                                        onDragStart={(e) => dragging = componentKey}
+                                        onDragStart={(e) => draggingFromOutside = componentKey}
                                         unselectable="on"
                                     >
                                         {componentKey}
@@ -169,30 +179,14 @@ export default function ConfigurationEditor() {
                                 >
                                     {
                                         pages[currentPage]?.layout?.map((component, index) => {
-                                            const componentName = component['i'].replace('_'+index, '');
-                                            const DyanmicComponent = componentMap[componentName];
-                                            return <Box key={component['i']}>
+                                            const [componentName] = component['i'].split('|');
+                                            const DyanmicComponent = componentMap[componentName][0];
+                                            return <Box key={component['i']} borderWidth={selectedComponent === index ? 2 : 0} h={'100%'} w={'100%'}>
                                                     <DyanmicComponent {...component} scaleFactor={scaleFactor}/>
                                             </Box>
                                         })
 
                                     }
-                                    {/* <Box key={1} borderWidth={2}>
-                                        <Flex
-                                                id="container_flex"
-                                                h={'100%'}
-                                                w={'100%'}
-                                                alignItems={'center'}
-                                                justifyContent={'center'}
-                                            >
-                                            <div  style={{transform: 'scale('+scaleFactor+') translate(0%, '+scaleFactorAsPercentage+'%)'}}> 
-                                                <span className="text">{1}</span>
-                                            </div>
-                                        </Flex>
-                                    </Box>
-                                    <Box key={2} borderWidth={2}>
-                                        <span className="text">{2}</span>
-                                    </Box> */}
                                 </ReactGridLayout> : <Box>Choose a page to begin</Box>}
                             </Box> 
                             : <Spinner size={'xl'}/>}
@@ -205,21 +199,36 @@ export default function ConfigurationEditor() {
                     maxW={'300px'}
                     p={2}
                 >
+                    <HStack alignItems={'center'} justifyContent={'end'}>
+                        <Tooltip label={'Clear Selection'}>
+                            <IconButton flexGrow={1} icon={<SmallCloseIcon/>} onClick={() => setSelectedComponent(-1)}/>
+                        </Tooltip>
+                        <Tooltip label='Bring Forward'>
+                            <IconButton flexGrow={1} icon={<ArrowUpIcon/>} />
+                        </Tooltip>
+                        <Tooltip label={'Push Backward'}>
+                            <IconButton flexGrow={1} icon={<ArrowDownIcon/>} />
+                        </Tooltip>
+                        <Tooltip label={'Delete Component'}>
+                            <IconButton flexGrow={1} icon={<DeleteIcon/>} />
+                        </Tooltip>
+                    </HStack>
                     <Box
-                        h={'50%'}
+                        flexGrow={1}
                         {...widget_common_styles}
                     >
-                        
+                        {pages?.length >= 0 && pages[currentPage]?.layout && selectedComponent >= 0 ? 
+                            <PropFormComponent
+                                propMap={componentMap[pages[currentPage]?.layout[selectedComponent]['i'].split('|')[0]][1]}
+                                propValues={pages[currentPage].propValues ? pages[currentPage].propValues[pages[currentPage]?.layout[selectedComponent]['i']] : {}}
+                                onSave={onUpdatePropValues(componentMap[pages[currentPage]?.layout[selectedComponent]['i']])}
+                            />                    
+                        : null}
                     </Box>
-
-                    <Box
-                        h={'50%'}
-                        {...widget_common_styles}
-                    >
-                        
-                    </Box>
-                    <Button onClick={savePages}>Save</Button>
                     <Flex>
+                        <Tooltip label='Save configuration'>
+                            <IconButton mr={2} icon={<BsFloppy/>} onClick={savePages} />
+                        </Tooltip>
                         <Select id="kiosk_select" flexGrow={1}>
                             {kiosks.map((k) => <option key={k.id} value={k.id} >{k.name} kiosk</option>)}
                         </Select>
@@ -229,16 +238,6 @@ export default function ConfigurationEditor() {
                     </Flex>
                 </Stack>
             </Flex>
-            {/* <Modal isOpen={loading} isCentered>
-                <ModalOverlay/>
-                <ModalContent
-                    alignItems={'center'} 
-                    justifyContent={'center'}
-                    minH={'200px'}
-                >
-                    <Spinner size={'xl'}/>
-                </ModalContent>
-            </Modal> */}
         </>
     );
 }
