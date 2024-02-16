@@ -16,13 +16,12 @@ export default function TestComponent({scaleFactor, text}) {
     return (
         <>
             <Flex
-                id="container_flex"
                 h={'100%'}
                 w={'100%'}
                 alignItems={'center'}
                 justifyContent={'center'}
             >
-                <div  style={{transform: 'scale('+scaleFactor+') translate(0%, '+scaleFactorAsPercentage+'%)'}}> 
+                <div style={{transform: 'scale('+scaleFactor+') translate(0%, '+scaleFactorAsPercentage+'%)'}}> 
                     <span className="text">{text}</span>
                 </div>
             </Flex>

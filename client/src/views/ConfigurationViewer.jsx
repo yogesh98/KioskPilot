@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Box, Flex } from "@chakra-ui/react";
+import { Box, layout } from "@chakra-ui/react";
 import { useClientContext } from "@yogeshp98/pocketbase-react";
 import { useNavigate, useParams } from "react-router-dom";
+
+import componentMap from "../components/Kiosk/ComponentMap";
+
 
 import RGL, { WidthProvider } from "react-grid-layout";
 import 'react-grid-layout/css/styles.css';
@@ -26,6 +29,7 @@ export default function ConfigurationViewer() {
         return () => pbClient.collection('configurations').unsubscribe();
     },[pbClient, params.kioskId]);
     console.log(config);
+    if(config)
     return (
     <>
       {config  ? <Box align="center" justify="center" h={config.height} w={config.width}>
@@ -33,7 +37,11 @@ export default function ConfigurationViewer() {
           className="layout"
           width={config.width}
           height={config.height}
-          layout={config.pages[params.pageIndex]?.layout}
+          layout={config.pages[params.pageIndex]?.layout.map((layoutItem) => {
+            layoutItem.static = true;
+            layoutItem.isDraggable = false;
+            return layoutItem;
+          })}
           compactType={null}
           cols={config.columns}
           rows={config.rows}
@@ -45,7 +53,17 @@ export default function ConfigurationViewer() {
           isDraggable={false}
           isResizable={false}
         >
+          {
+            config.pages[params.pageIndex]?.layout?.map((component, index) => {
+                const [componentName] = component['i'].split('|');
+                const DyanmicComponent = componentMap[componentName][0];
+                const props = config.pages[params.pageIndex].propValues[component['i']];
+                return <Box key={component['i']} h={'100%'} w={'100%'}>
+                        <DyanmicComponent {...component} scaleFactor={1} {...props}/>
+                </Box>
+            })
 
+          }
         </ReactGridLayout>
       </Box> : null }
     </>

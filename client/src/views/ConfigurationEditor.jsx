@@ -6,7 +6,6 @@ import { useAppContent, useClientContext } from "@yogeshp98/pocketbase-react";
 import { useParams } from "react-router-dom";
 
 import componentMap from "../components/Kiosk/ComponentMap";
-import TestComponent from "../components/Kiosk/TestComponent/TestComponent";
 
 import RGL, { WidthProvider } from "react-grid-layout";
 import 'react-grid-layout/css/styles.css';
@@ -90,8 +89,12 @@ export default function ConfigurationEditor() {
         })
     }
 
-    const onUpdatePropValues = (i) => (values) => {
-
+    const onUpdatePropValues = (i) => (key, value) => {
+        let newPages = [...pages];
+        newPages[currentPage]['propValues'] = {...newPages[currentPage]['propValues']};
+        newPages[currentPage]['propValues'][i] = {...newPages[currentPage]['propValues'][i]}
+        newPages[currentPage]['propValues'][i][key] = value;
+        setPages(newPages);
     }
 
     const pushToKiosk = () => {
@@ -99,6 +102,15 @@ export default function ConfigurationEditor() {
         const kioskId = document.getElementById('kiosk_select').value;
         const configId = config.id;
         pbClient.collection('kiosks').update(kioskId, {"configuration": configId}).then(() => setLoading(false))
+    }
+
+    const onDeleteComponent = () => {
+        console.log(selectedComponent);
+        let newPages = [...pages];
+        delete newPages[currentPage]['propValues'][pages[currentPage].layout[selectedComponent]['i']]
+        newPages[currentPage].layout.splice(selectedComponent, 1);
+        setSelectedComponent(-1);
+        setPages(newPages);
     }
 
     const adjustedWidth = config.width ? config.width * scaleFactor : "auto";
@@ -181,8 +193,9 @@ export default function ConfigurationEditor() {
                                         pages[currentPage]?.layout?.map((component, index) => {
                                             const [componentName] = component['i'].split('|');
                                             const DyanmicComponent = componentMap[componentName][0];
+                                            const props = pages[currentPage].propValues[component['i']];
                                             return <Box key={component['i']} borderWidth={selectedComponent === index ? 2 : 0} h={'100%'} w={'100%'}>
-                                                    <DyanmicComponent {...component} scaleFactor={scaleFactor}/>
+                                                    <DyanmicComponent {...component} scaleFactor={scaleFactor} {...props}/>
                                             </Box>
                                         })
 
@@ -210,7 +223,7 @@ export default function ConfigurationEditor() {
                             <IconButton flexGrow={1} icon={<ArrowDownIcon/>} />
                         </Tooltip>
                         <Tooltip label={'Delete Component'}>
-                            <IconButton flexGrow={1} icon={<DeleteIcon/>} />
+                            <IconButton flexGrow={1} icon={<DeleteIcon/>} onClick={onDeleteComponent} />
                         </Tooltip>
                     </HStack>
                     <Box
@@ -219,9 +232,10 @@ export default function ConfigurationEditor() {
                     >
                         {pages?.length >= 0 && pages[currentPage]?.layout && selectedComponent >= 0 ? 
                             <PropFormComponent
+                                componentId={pages[currentPage]?.layout[selectedComponent]['i']}
                                 propMap={componentMap[pages[currentPage]?.layout[selectedComponent]['i'].split('|')[0]][1]}
-                                propValues={pages[currentPage].propValues ? pages[currentPage].propValues[pages[currentPage]?.layout[selectedComponent]['i']] : {}}
-                                onSave={onUpdatePropValues(componentMap[pages[currentPage]?.layout[selectedComponent]['i']])}
+                                propValues={pages[currentPage]?.propValues ? pages[currentPage].propValues[pages[currentPage]?.layout[selectedComponent]['i']] : {}}
+                                onUpdatePropValues={onUpdatePropValues(pages[currentPage]?.layout[selectedComponent]['i'])}
                             />                    
                         : null}
                     </Box>
