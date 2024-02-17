@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Flex, HStack, IconButton, Select, Spinner, Stack, Tooltip, useColorModeValue } from '@chakra-ui/react';
-import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, DeleteIcon, ExternalLinkIcon, SmallCloseIcon } from "@chakra-ui/icons";
+import { Box, Button, Flex, HStack, IconButton, Input, InputGroup, InputRightElement, Select, Spinner, Stack, Tooltip, useColorModeValue } from '@chakra-ui/react';
+import { AddIcon, ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, DeleteIcon, ExternalLinkIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import { BsFloppy } from "react-icons/bs";
 import { useAppContent, useClientContext } from "@yogeshp98/pocketbase-react";
 import { useParams } from "react-router-dom";
@@ -15,7 +15,7 @@ const ReactGridLayout = WidthProvider(RGL);
 
 export default function ConfigurationEditor() {
     const widget_common_styles = {
-        borderRadius: '15px',
+        borderRadius: 'md',
         borderColor: useColorModeValue('gray.200', 'whiteAlpha.300'),
         borderWidth: 2,
         bg: useColorModeValue('gray.100', 'gray.900'),
@@ -50,9 +50,9 @@ export default function ConfigurationEditor() {
                 }
                 let adjustedScaleFactor = scaleFactor;
                 if(scaleFactor > 1){
-                    adjustedScaleFactor = Math.floor(scaleFactor / 10) * 10
+                    adjustedScaleFactor = Math.floor(scaleFactor / 100) * 100
                 } else {
-                    adjustedScaleFactor = Math.floor(scaleFactor * 10) / 10
+                    adjustedScaleFactor = Math.floor(scaleFactor * 100) / 100
                 }
                 setScaleFactor(adjustedScaleFactor);
                 setConfig(config);
@@ -77,6 +77,23 @@ export default function ConfigurationEditor() {
             })
         }
     }, [config, pages]);
+
+    const createNewPage = () => {
+        let val = document.getElementById('new_page_input').value;
+        if(val){
+            let newPages = [...pages, {'name': val}];
+            setPages(newPages);
+            setCurrentPage(newPages.length - 1);
+        }
+        document.getElementById('new_page_input').value = '';
+    }
+    
+    const onDeletePage = () => {
+        let newPages = [...pages];
+        newPages.splice(currentPage, 1);
+        setCurrentPage(-1);
+        setPages(newPages);
+    }
 
     const updateLayoutOnPages = (layout, layoutItem = null) => {
         if(layoutItem){
@@ -163,18 +180,39 @@ export default function ConfigurationEditor() {
                     maxW={'300px'}
                     p={2}
                 >
-                    <Select 
-                        placeholder="Select a Page"
-                        value={currentPage}
-                        onChange={(e) => setCurrentPage(e.target.value)}
+                    <HStack
                         {...widget_common_styles}
                     >
-                        {
-                            pages.map((item, index) => {
-                                return <option key={index} value={index} >{item.name} page</option>
-                            })
-                        }
-                    </Select>
+                        <Input 
+                            id="new_page_input"
+                            placeholder="New Page Name"
+                            onKeyDown={(e) => {
+                                if(e.key === 'Enter') createNewPage();
+                            }}
+                            variant={'unstyled'}
+                            mx={2}
+                        />
+                        <IconButton variant={'ghost'} colorScheme="blue" icon={<AddIcon/>} onClick={createNewPage} />
+                    </HStack>
+                    <HStack
+                        {...widget_common_styles}
+                    >
+                        <Tooltip label={'Delete Page'}>
+                            <IconButton colorScheme="red" variant={'ghost'} icon={<DeleteIcon/>} isDisabled={currentPage <= 0} onClick={onDeletePage} />
+                        </Tooltip>
+                        <Select 
+                            placeholder="Select a Page"
+                            value={currentPage}
+                            onChange={(e) => setCurrentPage(e.target.value)}
+                            variant={'unstyled'}
+                        >
+                            {
+                                pages.map((item, index) => {
+                                    return <option key={index} value={index} >{item.name}</option>
+                                })
+                            }
+                        </Select>
+                    </HStack>
                     <Flex
                         flexGrow={1}
                         p={2}
@@ -184,7 +222,7 @@ export default function ConfigurationEditor() {
                     >
                         {
                             Object.keys(componentMap).map((componentKey) => {
-                                return (<Box key={componentKey} h={'25%'} w={'50%'} borderRadius={'7px'} borderWidth={2} bgColor={useColorModeValue('gray.300', 'gray.700')}
+                                return (<Box key={componentKey} h={'25%'} w={'45%'} borderRadius={'md'} borderWidth={2} bgColor={useColorModeValue('gray.300', 'gray.700')}
                                 >
                                     <div
                                         className="droppable-element"
@@ -217,7 +255,7 @@ export default function ConfigurationEditor() {
                 <Flex id="layoutContainer" flexGrow={1} alignItems={'center'} justifyContent={'center'}>
                     <Box id="scaledContainer" w={adjustedWidth} h={adjustedHeight}>
                         {!loading ? 
-                            <Box id="LayoutBox" borderWidth={2} w={adjustedWidth} h={adjustedHeight}>
+                            <Box id="LayoutBox" key={currentPage} borderWidth={2} w={adjustedWidth} h={adjustedHeight}>
                                 {currentPage != '' && currentPage >= 0 ? <ReactGridLayout
                                     className="layout"
                                     autoSize={false}
@@ -242,10 +280,10 @@ export default function ConfigurationEditor() {
                                     }}
                                 >
                                     {
-                                        pages[currentPage]?.layout?.map((component, index) => {
+                                        pages && pages[currentPage]?.layout?.map((component, index) => {
                                             const [componentName] = component['i'].split('|');
                                             const DyanmicComponent = componentMap[componentName][0];
-                                            const props = pages[currentPage].propValues[component['i']];
+                                            const props = pages[currentPage]?.propValues && pages[currentPage]?.propValues[component['i']] ? pages[currentPage]?.propValues[component['i']] : null;
                                             return <Box key={component['i']} borderWidth={selectedComponent === index ? 2 : 0} h={'100%'} w={'100%'}>
                                                     <DyanmicComponent {...component} scaleFactor={scaleFactor} {...props}/>
                                             </Box>
@@ -264,16 +302,16 @@ export default function ConfigurationEditor() {
                 >
                     <HStack alignItems={'center'} justifyContent={'end'}>
                         <Tooltip label={'Clear Selection'}>
-                            <IconButton flexGrow={1} colorScheme="orange" variant={'outline'} icon={<SmallCloseIcon/>} onClick={() => setSelectedComponent(-1)}/>
+                            <IconButton flexGrow={1} colorScheme="orange" variant={'outline'} icon={<SmallCloseIcon/>} isDisabled={selectedComponent < 0} onClick={() => setSelectedComponent(-1)}/>
                         </Tooltip>
                         <Tooltip label='Bring Forward'>
-                            <IconButton flexGrow={1} colorScheme="blue" variant={'outline'} icon={<ArrowUpIcon/>} onClick={bringFoward} />
+                            <IconButton flexGrow={1} colorScheme="blue" variant={'outline'} icon={<ArrowUpIcon/>} isDisabled={selectedComponent < 0} onClick={bringFoward} />
                         </Tooltip>
                         <Tooltip label={'Push Backward'}>
-                            <IconButton flexGrow={1} colorScheme="blue" variant={'outline'} icon={<ArrowDownIcon/>} onClick={pushBackward} />
+                            <IconButton flexGrow={1} colorScheme="blue" variant={'outline'}  icon={<ArrowDownIcon/>} isDisabled={selectedComponent < 0} onClick={pushBackward} />
                         </Tooltip>
                         <Tooltip label={'Delete Component'}>
-                            <IconButton flexGrow={1} colorScheme="red" icon={<DeleteIcon/>} onClick={onDeleteComponent} />
+                            <IconButton flexGrow={1} colorScheme="red" icon={<DeleteIcon/>} isDisabled={selectedComponent < 0} onClick={onDeleteComponent} />
                         </Tooltip>
                     </HStack>
                     <Box
@@ -297,7 +335,7 @@ export default function ConfigurationEditor() {
                             <IconButton mr={2} colorScheme={'blue'} variant={'outline'} icon={<BsFloppy/>} onClick={savePages} />
                         </Tooltip>
                         <Select id="kiosk_select" flexGrow={1}>
-                            {kiosks.map((k) => <option key={k.id} value={k.id} >{k.name} kiosk</option>)}
+                            {kiosks?.map((k) => <option key={k.id} value={k.id} >{k.name} kiosk</option>)}
                         </Select>
                         <Tooltip label='Push to Kiosk'>
                             <IconButton ml={2} colorScheme={'blue'} icon={<ArrowRightIcon/>} onClick={pushToKiosk} />

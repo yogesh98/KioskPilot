@@ -28,7 +28,8 @@ export default function ConfigurationPickerComponent({
 }) {
     const [currentConfiguration, setCurrentConfiguration] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { records: configurations, actions, isSubscribed } = useAppContent('configurations');
+    const { records: configurations, actions, isSubscribed } = useAppContent('configurations', true);
+
     useEffect(() => {
         if(!isSubscribed){
             actions.subscribe();
