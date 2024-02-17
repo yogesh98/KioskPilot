@@ -15,7 +15,7 @@ export default function DashboardLayout() {
 	return (
     <>
     <Flex id="dashboard_bounding_box" maxH={'100vh'} flexDir={'column'}>
-        <Box w="100vw" >
+        <Box w="100vw">
             <Navbar/>
         </Box>
     	<Outlet />

@@ -173,7 +173,7 @@ export default function ConfigurationEditor() {
             <Flex
                 id="configurationEditorBoundingBox"
                 borderRadius={'15px'}
-                flexGrow={1}
+                flex={'0 0 100%'}
             >
                 <Stack
                     minW={'300px'}
