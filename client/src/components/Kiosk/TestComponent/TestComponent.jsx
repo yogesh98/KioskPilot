@@ -9,7 +9,7 @@ export const propMap = {
             'placeholder': 'Text to show in component',
         },
         'follow_up_questions': {
-            'test': { // this key is the answer from the parent that causes this one to render.
+            'showFollowUp': { // this key is the answer from the parent that causes this one to render.
                 'secondPropName': {
                     'label': 'human readable label for follow up',
                     'inputType': 'input',
@@ -21,14 +21,6 @@ export const propMap = {
             }
         }
     },
-    "thirdProp" : {
-        'label': 'human readable label for third prop',
-        'inputType': 'input',
-        'componentProps': { // props that go into the input type
-            'type': 'text',
-            'placeholder': 'Text for third prop',
-        },
-    },
     "selectAbleProp" : {
         'label': 'Select an option',
         'inputType': 'select',
@@ -39,8 +31,31 @@ export const propMap = {
             'value': 'label',
             'value2': 'label2'
         }
+    },
+    "thirdProp" : {
+        'label': 'human readable label for third prop',
+        'inputType': 'input',
+        'componentProps': { // props that go into the input type
+            'type': 'text',
+            'placeholder': 'Text for third prop',
+        },
+    },
+    "fourth": {
+        'label': 'human readable label for third prop',
+        'inputType': 'input',
+        'componentProps': { // props that go into the input type
+            'type': 'text',
+            'placeholder': 'Text for third prop',
+        },
+    },
+    "fifth": {
+        'label': 'human readable label for third prop',
+        'inputType': 'input',
+        'componentProps': { // props that go into the input type
+            'type': 'text',
+            'placeholder': 'Text for third prop',
+        },
     }
-
 };
 
 export default function TestComponent({scaleFactor, propName, secondPropName, thirdProp, selectAbleProp}) {

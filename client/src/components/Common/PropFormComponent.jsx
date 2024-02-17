@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Flex, FormControl, FormLabel, Input, Select } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, Input, Select, VStack } from "@chakra-ui/react";
 
 
 export default function PropFormComponent({componentId, propMap, propValues, onUpdatePropValues}) {
@@ -21,9 +21,8 @@ export default function PropFormComponent({componentId, propMap, propValues, onU
 	}
 
 	return (
-		<Flex h={'100%'} w={'100%'} p={2} flexDir={'column'}>
+		<Box p={2}>
 			<FormControl
-				flexGrow={1}
 				overflowY={'auto'}
 			>
 				{
@@ -32,15 +31,16 @@ export default function PropFormComponent({componentId, propMap, propValues, onU
 							<Box key={'main_question_'+key+'|'+componentId} mb={4}>
 								{renderQuestion(propMap, key)}
 							</Box>
-							<Box key={'follow_up_question_'+key+'|'+componentId} mb={4}>
-								{propMap && propMap[key] && propMap[key]['follow_up_questions'] && propValues && propValues[key] && propMap[key]['follow_up_questions'][propValues[key]] ? 
-									Object.keys(propMap[key]['follow_up_questions'][propValues[key]]).map((follow_up_key) => renderQuestion(propMap[key]['follow_up_questions'][propValues[key]], follow_up_key))	
-								: null}
-							</Box>
+							{propMap && propMap[key] && propMap[key]['follow_up_questions'] && propValues && propValues[key] && propMap[key]['follow_up_questions'][propValues[key]] ? 
+								<Box key={'follow_up_question_'+key+'|'+componentId} mb={4}>
+										{Object.keys(propMap[key]['follow_up_questions'][propValues[key]]).map((follow_up_key) => renderQuestion(propMap[key]['follow_up_questions'][propValues[key]], follow_up_key))}	
+								</Box> 
+							: null}
+
 						</Box>);
 					})
 				}
 			</FormControl>
-		</Flex>
+		</Box>
   	);
 }

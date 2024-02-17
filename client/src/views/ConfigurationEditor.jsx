@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Flex, HStack, IconButton, Input, InputGroup, InputRightElement, Select, Spinner, Stack, Tooltip, useColorModeValue } from '@chakra-ui/react';
+import { Box, Button, Flex, HStack, IconButton, Input, InputGroup, InputRightElement, Select, Spinner, Stack, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { AddIcon, ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, DeleteIcon, ExternalLinkIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import { BsFloppy } from "react-icons/bs";
 import { useAppContent, useClientContext } from "@yogeshp98/pocketbase-react";
@@ -255,7 +255,7 @@ export default function ConfigurationEditor() {
                 <Flex id="layoutContainer" flexGrow={1} alignItems={'center'} justifyContent={'center'}>
                     <Box id="scaledContainer" w={adjustedWidth} h={adjustedHeight}>
                         {!loading ? 
-                            <Box id="LayoutBox" key={currentPage} borderWidth={2} w={adjustedWidth} h={adjustedHeight}>
+                            <Box id="LayoutBox" key={currentPage} borderWidth={2} w={adjustedWidth} h={adjustedHeight} {...widget_common_styles}>
                                 {currentPage != '' && currentPage >= 0 ? <ReactGridLayout
                                     className="layout"
                                     autoSize={false}
@@ -314,21 +314,44 @@ export default function ConfigurationEditor() {
                             <IconButton flexGrow={1} colorScheme="red" icon={<DeleteIcon/>} isDisabled={selectedComponent < 0} onClick={onDeleteComponent} />
                         </Tooltip>
                     </HStack>
-                    <Box
-                        flexGrow={1}
-                        p={2}
-                        overflowY={'auto'}
-                        overflowX={'hidden'}
-                        {...widget_common_styles}
-                    >
-                        {pages?.length >= 0 && pages[currentPage]?.layout && selectedComponent >= 0 ? 
-                            <PropFormComponent
-                                componentId={pages[currentPage]?.layout[selectedComponent]['i']}
-                                propMap={componentMap[pages[currentPage]?.layout[selectedComponent]['i'].split('|')[0]][1]}
-                                propValues={pages[currentPage]?.propValues ? pages[currentPage].propValues[pages[currentPage]?.layout[selectedComponent]['i']] : {}}
-                                onUpdatePropValues={onUpdatePropValues(pages[currentPage]?.layout[selectedComponent]['i'])}
-                            />                    
-                        : null}
+                    <Box flexGrow={1} mb={2}>
+                        <Box
+                            h={'50%'}
+                            overflowY={'auto'}
+                            p={2}
+                            mb={2}
+                            {...widget_common_styles}
+                        >
+                            {pages?.length >= 0 && pages[currentPage]?.layout && selectedComponent >= 0 ? 
+                                <PropFormComponent
+                                    componentId={pages[currentPage]?.layout[selectedComponent]['i']}
+                                    propMap={componentMap[pages[currentPage]?.layout[selectedComponent]['i'].split('|')[0]][1]}
+                                    propValues={pages[currentPage]?.propValues ? pages[currentPage].propValues[pages[currentPage]?.layout[selectedComponent]['i']] : {}}
+                                    onUpdatePropValues={onUpdatePropValues(pages[currentPage]?.layout[selectedComponent]['i'])}
+                                />                    
+                            : <Flex h={'100%'} w={'100%'} alignItems={'center'} justifyContent={'center'}>No component selected</Flex>}
+                        </Box>
+                        <Box
+                            h={'50%'}
+                            overflowY={'auto'}
+                            p={2}
+                            {...widget_common_styles}
+                        >
+                            <Box p={2}>File Upload Box</Box>
+                            <Box p={2}>File Upload Box</Box>
+
+                            <Box p={2}>File Upload Box</Box>
+
+                            <Box p={2}>File Upload Box</Box>
+                            <Box p={2}>File Upload Box</Box>
+                            <Box p={2}>File Upload Box</Box>
+                            <Box p={2}>File Upload Box</Box>
+                            <Box p={2}>File Upload Box</Box>
+                            <Box p={2}>File Upload Box</Box>
+                            <Box p={2}>File Upload Box</Box>
+
+                            {/* <Flex h={'100%'} w={'100%'} alignItems={'center'} justifyContent={'center'}>File Upload Box</Flex> */}
+                        </Box>
                     </Box>
                     <Flex>
                         <Tooltip label='Save configuration'>
