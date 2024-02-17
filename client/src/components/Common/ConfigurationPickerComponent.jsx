@@ -21,12 +21,6 @@ import {
   
 import { ChevronDownIcon, AddIcon } from '@chakra-ui/icons'
 import { useAppContent } from '@yogeshp98/pocketbase-react'
-
-/*
-    TODO:
-    Figure out why subscribe adds so many records to the array.
-    Instead of by kiosk do by configuration and push it to the kiosk
-*/
   
 export default function ConfigurationPickerComponent({
     currentConfigurationId,
@@ -82,7 +76,10 @@ export default function ConfigurationPickerComponent({
                 {currentConfiguration ? currentConfiguration.name + " (" + currentConfiguration.width + "x" + currentConfiguration.height + ")" : "Pick a configuration"}
             </MenuButton>
             <MenuList overflowY={'scroll'}>
-                {configurations?.map((configuration) => <MenuItem key={configuration.id} onClick={() => onChange(configuration.id)}>{configuration.name + " (" + configuration.width + "x" + configuration.height + ")"}</MenuItem>)}
+                {configurations?.map((configuration) => {
+                    if(configuration.id === '_preview_config') return null;
+                    return <MenuItem key={configuration.id} onClick={() => onChange(configuration.id)}>{configuration.name + " (" + configuration.width + "x" + configuration.height + ")"}</MenuItem>
+                })}
                 <MenuDivider />
                 <MenuItem onClick={onOpen}> <AddIcon mr={2}/> Create</MenuItem>
             </MenuList>

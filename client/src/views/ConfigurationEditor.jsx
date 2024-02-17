@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Flex, HStack, IconButton, Select, Spinner, Stack, Tooltip, useColorModeValue } from '@chakra-ui/react';
-import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, DeleteIcon, SmallCloseIcon } from "@chakra-ui/icons";
+import { ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, DeleteIcon, ExternalLinkIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import { BsFloppy } from "react-icons/bs";
 import { useAppContent, useClientContext } from "@yogeshp98/pocketbase-react";
 import { useParams } from "react-router-dom";
@@ -27,9 +27,11 @@ export default function ConfigurationEditor() {
     const [pages, setPages] = useState([]);
     const [scaleFactor, setScaleFactor] = useState(1);
     const [loading, setLoading] = useState(true);
+    const [previewLoading, setPreviewLoading] = useState(true);
     const [selectedComponent, setSelectedComponent] = useState(-1);
     const {records: kiosks} = useAppContent('kiosks', true);
     let draggingFromOutside = null;
+    let timeout = null;
 
     useEffect(() => {
         setLoading(true);
@@ -60,10 +62,27 @@ export default function ConfigurationEditor() {
         });
     }, [pbClient, params.configurationId]);
 
+    useEffect(() => {
+        setPreviewLoading(true);
+        if(config['id']){
+            let previewConfig = {...config};
+            delete(previewConfig['id']);
+            delete(previewConfig['collectionId']);
+            delete(previewConfig['collectionName']);
+            previewConfig['id'] = '_preview_config';
+            previewConfig['pages'] = pages;
+            pbClient.collection('configurations').update('_preview_config', previewConfig).then(() => {
+                if(timeout) clearTimeout(timeout);
+                timeout = setTimeout(() => setPreviewLoading(false), 250);
+            })
+        }
+    }, [config, pages]);
 
-    const updateLayoutOnPages = (layout, layoutItem) => {
-        const index = layout.findIndex(item => item['i'] === layoutItem['i']);
-        setSelectedComponent(index);
+    const updateLayoutOnPages = (layout, layoutItem = null) => {
+        if(layoutItem){
+            const index = layout.findIndex(item => item['i'] === layoutItem['i']);
+            setSelectedComponent(index);
+        }
         let newPages = [...pages];
         newPages[currentPage] = {...newPages[currentPage], "layout": layout}
         setPages(newPages);
@@ -105,12 +124,29 @@ export default function ConfigurationEditor() {
     }
 
     const onDeleteComponent = () => {
-        console.log(selectedComponent);
         let newPages = [...pages];
         delete newPages[currentPage]['propValues'][pages[currentPage].layout[selectedComponent]['i']]
         newPages[currentPage].layout.splice(selectedComponent, 1);
         setSelectedComponent(-1);
         setPages(newPages);
+    }
+
+    const bringFoward = () => {
+        let newLayout = pages[currentPage].layout ? [...pages[currentPage].layout] : [];
+        if (selectedComponent >= 0 && selectedComponent < newLayout.length - 1) {
+            [newLayout[selectedComponent], newLayout[selectedComponent + 1]] = [newLayout[selectedComponent + 1], newLayout[selectedComponent]];
+            setSelectedComponent(selectedComponent + 1);
+        }
+        updateLayoutOnPages(newLayout);
+    }
+
+    const pushBackward = () => {
+        let newLayout = pages[currentPage].layout ? [...pages[currentPage].layout] : [];
+        if (selectedComponent > 0 && selectedComponent < newLayout.length) {
+            [newLayout[selectedComponent], newLayout[selectedComponent - 1]] = [newLayout[selectedComponent - 1], newLayout[selectedComponent]];
+            setSelectedComponent(selectedComponent - 1);
+        }
+        updateLayoutOnPages(newLayout);
     }
 
     const adjustedWidth = config.width ? config.width * scaleFactor : "auto";
@@ -123,8 +159,6 @@ export default function ConfigurationEditor() {
                 flexGrow={1}
             >
                 <Stack
-                    overflowY={'auto'}
-                    overflowX={'hidden'}
                     minW={'300px'}
                     maxW={'300px'}
                     p={2}
@@ -141,26 +175,44 @@ export default function ConfigurationEditor() {
                             })
                         }
                     </Select>
-                    <Box
+                    <Flex
                         flexGrow={1}
+                        p={2}
+                        overflowY={'auto'}
+                        overflowX={'hidden'}                        
                         {...widget_common_styles}
                     >
                         {
                             Object.keys(componentMap).map((componentKey) => {
-                                return (
+                                return (<Box key={componentKey} h={'25%'} w={'50%'} borderRadius={'7px'} borderWidth={2} bgColor={useColorModeValue('gray.300', 'gray.700')}
+                                >
                                     <div
-                                        key={componentKey}
                                         className="droppable-element"
                                         draggable={true}
                                         onDragStart={(e) => draggingFromOutside = componentKey}
                                         unselectable="on"
+                                        style={{height: '100%'}}
                                     >
-                                        {componentKey}
+                                        <Flex
+                                            h={'100%'}
+                                            alignItems={'center'} 
+                                            justifyContent={'center'}
+                                        >
+                                            {componentKey}
+                                        </Flex>
                                     </div>
+                                </Box>
                                 );
                             })
                         }
-                    </Box>
+                    </Flex>
+                    <Button 
+                        isDisabled={previewLoading} 
+                        leftIcon={previewLoading ? <Spinner size={'sm'}/> :<ExternalLinkIcon/>}
+                        onClick={() => window.open('/kiosk/_preview_kiosk_/', '_blank').focus()}
+                    >
+                        Open Preview
+                    </Button>
                 </Stack>                
                 <Flex id="layoutContainer" flexGrow={1} alignItems={'center'} justifyContent={'center'}>
                     <Box id="scaledContainer" w={adjustedWidth} h={adjustedHeight}>
@@ -200,34 +252,35 @@ export default function ConfigurationEditor() {
                                         })
 
                                     }
-                                </ReactGridLayout> : <Box>Choose a page to begin</Box>}
+                                </ReactGridLayout> : <Flex h={'100%'} w={'100%'} alignItems={'center'} justifyContent={'center'}>Choose a page to begin</Flex>}
                             </Box> 
                             : <Spinner size={'xl'}/>}
                     </Box>
                 </Flex>
                 <Stack
-                    overflowY={'auto'}
-                    overflowX={'hidden'}
                     minW={'300px'}
                     maxW={'300px'}
                     p={2}
                 >
                     <HStack alignItems={'center'} justifyContent={'end'}>
                         <Tooltip label={'Clear Selection'}>
-                            <IconButton flexGrow={1} icon={<SmallCloseIcon/>} onClick={() => setSelectedComponent(-1)}/>
+                            <IconButton flexGrow={1} colorScheme="orange" variant={'outline'} icon={<SmallCloseIcon/>} onClick={() => setSelectedComponent(-1)}/>
                         </Tooltip>
                         <Tooltip label='Bring Forward'>
-                            <IconButton flexGrow={1} icon={<ArrowUpIcon/>} />
+                            <IconButton flexGrow={1} colorScheme="blue" variant={'outline'} icon={<ArrowUpIcon/>} onClick={bringFoward} />
                         </Tooltip>
                         <Tooltip label={'Push Backward'}>
-                            <IconButton flexGrow={1} icon={<ArrowDownIcon/>} />
+                            <IconButton flexGrow={1} colorScheme="blue" variant={'outline'} icon={<ArrowDownIcon/>} onClick={pushBackward} />
                         </Tooltip>
                         <Tooltip label={'Delete Component'}>
-                            <IconButton flexGrow={1} icon={<DeleteIcon/>} onClick={onDeleteComponent} />
+                            <IconButton flexGrow={1} colorScheme="red" icon={<DeleteIcon/>} onClick={onDeleteComponent} />
                         </Tooltip>
                     </HStack>
                     <Box
                         flexGrow={1}
+                        p={2}
+                        overflowY={'auto'}
+                        overflowX={'hidden'}
                         {...widget_common_styles}
                     >
                         {pages?.length >= 0 && pages[currentPage]?.layout && selectedComponent >= 0 ? 
@@ -241,13 +294,13 @@ export default function ConfigurationEditor() {
                     </Box>
                     <Flex>
                         <Tooltip label='Save configuration'>
-                            <IconButton mr={2} icon={<BsFloppy/>} onClick={savePages} />
+                            <IconButton mr={2} colorScheme={'blue'} variant={'outline'} icon={<BsFloppy/>} onClick={savePages} />
                         </Tooltip>
                         <Select id="kiosk_select" flexGrow={1}>
                             {kiosks.map((k) => <option key={k.id} value={k.id} >{k.name} kiosk</option>)}
                         </Select>
                         <Tooltip label='Push to Kiosk'>
-                            <IconButton ml={2} icon={<ArrowRightIcon/>} onClick={pushToKiosk} />
+                            <IconButton ml={2} colorScheme={'blue'} icon={<ArrowRightIcon/>} onClick={pushToKiosk} />
                         </Tooltip>
                     </Flex>
                 </Stack>

@@ -32,7 +32,7 @@ export default function ConfigurationViewer() {
     if(config)
     return (
     <>
-      {config  ? <Box align="center" justify="center" h={config.height} w={config.width}>
+      {config  ? <Box align="center" justify="center" h={config.height} w={config.width} outline={'5px dotted black'}>
         <ReactGridLayout
           className="layout"
           width={config.width}
@@ -52,6 +52,10 @@ export default function ConfigurationViewer() {
           allowOverlap={true}
           isDraggable={false}
           isResizable={false}
+          style={{
+            height: '100%',
+            width: '100%',
+          }}
         >
           {
             config.pages[params.pageIndex]?.layout?.map((component, index) => {

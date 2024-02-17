@@ -21,7 +21,7 @@ export default function TestComponent({scaleFactor, text}) {
                 alignItems={'center'}
                 justifyContent={'center'}
             >
-                <div style={{transform: 'scale('+scaleFactor+') translate(0%, '+scaleFactorAsPercentage+'%)'}}> 
+                <div style={{transform: 'scale('+scaleFactor+') translate(0%, 0%)'}}> 
                     <span className="text">{text}</span>
                 </div>
             </Flex>
