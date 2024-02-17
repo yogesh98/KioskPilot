@@ -18,7 +18,7 @@ export default function DashboardLayout() {
         <Box w="100vw">
             <Navbar/>
         </Box>
-    	<Outlet />
+        <Outlet />
     </Flex>
     </>
   	);

@@ -20,11 +20,7 @@ export default function PropFormComponent({componentId, propMap, propValues, onU
 		</>);
 	}
 
-	return (
-		<Box p={2}>
-			<FormControl
-				overflowY={'auto'}
-			>
+	return (<>
 				{
 					Object.keys(propMap).map((key) => {
 						return (<Box key={key+'|'+componentId}>
@@ -40,7 +36,5 @@ export default function PropFormComponent({componentId, propMap, propValues, onU
 						</Box>);
 					})
 				}
-			</FormControl>
-		</Box>
-  	);
+  	</>);
 }

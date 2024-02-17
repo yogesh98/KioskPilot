@@ -173,7 +173,7 @@ export default function ConfigurationEditor() {
             <Flex
                 id="configurationEditorBoundingBox"
                 borderRadius={'15px'}
-                flex={'0 0 100%'}
+                h={'100%'}
             >
                 <Stack
                     minW={'300px'}
@@ -295,9 +295,11 @@ export default function ConfigurationEditor() {
                             : <Spinner size={'xl'}/>}
                     </Box>
                 </Flex>
-                <Stack
+                <VStack
                     minW={'300px'}
                     maxW={'300px'}
+                    h={'100%'}
+                    align={'stretch'}
                     p={2}
                 >
                     <HStack alignItems={'center'} justifyContent={'end'}>
@@ -314,9 +316,8 @@ export default function ConfigurationEditor() {
                             <IconButton flexGrow={1} colorScheme="red" icon={<DeleteIcon/>} isDisabled={selectedComponent < 0} onClick={onDeleteComponent} />
                         </Tooltip>
                     </HStack>
-                    <Box flexGrow={1} mb={2}>
                         <Box
-                            h={'50%'}
+                            flexGrow={1}
                             overflowY={'auto'}
                             p={2}
                             mb={2}
@@ -332,7 +333,7 @@ export default function ConfigurationEditor() {
                             : <Flex h={'100%'} w={'100%'} alignItems={'center'} justifyContent={'center'}>No component selected</Flex>}
                         </Box>
                         <Box
-                            h={'50%'}
+                            flexGrow={1}
                             overflowY={'auto'}
                             p={2}
                             {...widget_common_styles}
@@ -352,7 +353,6 @@ export default function ConfigurationEditor() {
 
                             {/* <Flex h={'100%'} w={'100%'} alignItems={'center'} justifyContent={'center'}>File Upload Box</Flex> */}
                         </Box>
-                    </Box>
                     <Flex>
                         <Tooltip label='Save configuration'>
                             <IconButton mr={2} colorScheme={'blue'} variant={'outline'} icon={<BsFloppy/>} onClick={savePages} />
@@ -364,7 +364,7 @@ export default function ConfigurationEditor() {
                             <IconButton ml={2} colorScheme={'blue'} icon={<ArrowRightIcon/>} onClick={pushToKiosk} />
                         </Tooltip>
                     </Flex>
-                </Stack>
+                </VStack>
             </Flex>
         </>
     );
