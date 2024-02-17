@@ -15,10 +15,12 @@ export default function DashboardLayout() {
 	return (
     <>
     <Flex id="dashboard_bounding_box" maxH={'100vh'} flexDir={'column'}>
-        <Box w="100vw">
+        <Box w="100vw" h={'72px'}>
             <Navbar/>
         </Box>
-        <Outlet />
+        <Box h={'calc(100vh - 72px)'}>
+            <Outlet />
+        </Box>
     </Flex>
     </>
   	);
