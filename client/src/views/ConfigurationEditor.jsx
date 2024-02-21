@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Box, Button, Flex, HStack, IconButton, Input, InputGroup, InputRightElement, Select, Spinner, Stack, Tooltip, VStack, useColorModeValue } from '@chakra-ui/react';
 import { AddIcon, ArrowDownIcon, ArrowRightIcon, ArrowUpIcon, DeleteIcon, ExternalLinkIcon, SmallCloseIcon } from "@chakra-ui/icons";
 import { BsFloppy } from "react-icons/bs";
@@ -11,6 +11,7 @@ import RGL, { WidthProvider } from "react-grid-layout";
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 import PropFormComponent from "../components/Common/PropFormComponent";
+import FileUploadComponent from "../components/Common/FileUploadComponent";
 const ReactGridLayout = WidthProvider(RGL);
 
 export default function ConfigurationEditor() {
@@ -33,8 +34,7 @@ export default function ConfigurationEditor() {
     let draggingFromOutside = null;
     let timeout = null;
 
-    useEffect(() => {
-        setLoading(true);
+    const refreshConfig = useCallback(() => {
         pbClient.collection('configurations').getOne(params.configurationId).then((config) => {
             const layoutContainer = document.getElementById('layoutContainer');
             if (layoutContainer && config.height && config.width) {
@@ -60,6 +60,11 @@ export default function ConfigurationEditor() {
             }
             setLoading(false);
         });
+    })
+
+    useEffect(() => {
+        setLoading(true);
+        refreshConfig();
     }, [pbClient, params.configurationId]);
 
     useEffect(() => {
@@ -71,6 +76,7 @@ export default function ConfigurationEditor() {
             delete(previewConfig['collectionName']);
             previewConfig['id'] = '_preview_config';
             previewConfig['pages'] = pages;
+            previewConfig['files'] = [];
             pbClient.collection('configurations').update('_preview_config', previewConfig).then(() => {
                 if(timeout) clearTimeout(timeout);
                 timeout = setTimeout(() => setPreviewLoading(false), 250);
@@ -121,6 +127,14 @@ export default function ConfigurationEditor() {
         pbClient.collection('configurations').update(config.id, {"pages": pages}).then((config) => {
             setConfig(config);
             setPages(config.pages);
+            setLoading(false);
+        })
+    }
+
+    const saveFiles = (files) => {
+        setLoading(true);
+        pbClient.collection('configurations').update(config.id, {"files": files}).then((config) => {
+            setConfig(config);
             setLoading(false);
         })
     }
@@ -321,10 +335,12 @@ export default function ConfigurationEditor() {
                             overflowY={'auto'}
                             p={2}
                             mb={2}
+                            minH={'200px'}
                             {...widget_common_styles}
                         >
                             {pages?.length >= 0 && pages[currentPage]?.layout && selectedComponent >= 0 ? 
                                 <PropFormComponent
+                                    config={config}
                                     componentId={pages[currentPage]?.layout[selectedComponent]['i']}
                                     propMap={componentMap[pages[currentPage]?.layout[selectedComponent]['i'].split('|')[0]][1]}
                                     propValues={pages[currentPage]?.propValues ? pages[currentPage].propValues[pages[currentPage]?.layout[selectedComponent]['i']] : {}}
@@ -338,20 +354,7 @@ export default function ConfigurationEditor() {
                             p={2}
                             {...widget_common_styles}
                         >
-                            <Box p={2}>File Upload Box</Box>
-                            <Box p={2}>File Upload Box</Box>
-
-                            <Box p={2}>File Upload Box</Box>
-
-                            <Box p={2}>File Upload Box</Box>
-                            <Box p={2}>File Upload Box</Box>
-                            <Box p={2}>File Upload Box</Box>
-                            <Box p={2}>File Upload Box</Box>
-                            <Box p={2}>File Upload Box</Box>
-                            <Box p={2}>File Upload Box</Box>
-                            <Box p={2}>File Upload Box</Box>
-
-                            {/* <Flex h={'100%'} w={'100%'} alignItems={'center'} justifyContent={'center'}>File Upload Box</Flex> */}
+                            <FileUploadComponent files={config.files} saveFiles={saveFiles} />
                         </Box>
                     <Flex>
                         <Tooltip label='Save configuration'>

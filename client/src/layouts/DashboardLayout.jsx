@@ -14,14 +14,14 @@ export default function DashboardLayout() {
     }, [location.pathname]);
 	return (
     <>
-    <Flex id="dashboard_bounding_box" maxH={'100vh'} flexDir={'column'}>
-        <Box w="100vw" h={'72px'}>
-            <Navbar/>
-        </Box>
-        <Box h={'calc(100vh - 72px)'}>
-            <Outlet />
-        </Box>
-    </Flex>
+        <Flex id="dashboard_bounding_box" maxH={'100vh'} flexDir={'column'}>
+            <Box w="100vw" h={'72px'}>
+                <Navbar/>
+            </Box>
+            <Box h={'calc(100vh - 72px)'}>
+                <Outlet />
+            </Box>
+        </Flex>
     </>
   	);
 }
