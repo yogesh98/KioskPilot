@@ -30,7 +30,7 @@ export default function ConfigurationEditor() {
     const [loading, setLoading] = useState(true);
     const [previewLoading, setPreviewLoading] = useState(true);
     const [selectedComponent, setSelectedComponent] = useState(-1);
-    const {records: kiosks} = useAppContent('kiosks', true);
+    const { records: kiosks } = useAppContent('kiosks', true);
     let draggingFromOutside = null;
     let timeout = null;
 
@@ -49,7 +49,7 @@ export default function ConfigurationEditor() {
                     scaleFactor = containerRect.height / config.height;
                 }
                 let adjustedScaleFactor = scaleFactor;
-                if(scaleFactor > 1){
+                if (scaleFactor > 1) {
                     adjustedScaleFactor = Math.floor(scaleFactor / 100) * 100
                 } else {
                     adjustedScaleFactor = Math.floor(scaleFactor * 100) / 100
@@ -69,16 +69,16 @@ export default function ConfigurationEditor() {
 
     useEffect(() => {
         setPreviewLoading(true);
-        if(config['id']){
-            let previewConfig = {...config};
-            delete(previewConfig['id']);
-            delete(previewConfig['collectionId']);
-            delete(previewConfig['collectionName']);
+        if (config['id']) {
+            let previewConfig = { ...config };
+            delete (previewConfig['id']);
+            delete (previewConfig['collectionId']);
+            delete (previewConfig['collectionName']);
             previewConfig['id'] = '_preview_config';
             previewConfig['pages'] = pages;
             previewConfig['files'] = [];
             pbClient.collection('configurations').update('_preview_config', previewConfig).then(() => {
-                if(timeout) clearTimeout(timeout);
+                if (timeout) clearTimeout(timeout);
                 timeout = setTimeout(() => setPreviewLoading(false), 250);
             })
         }
@@ -86,14 +86,14 @@ export default function ConfigurationEditor() {
 
     const createNewPage = () => {
         let val = document.getElementById('new_page_input').value;
-        if(val){
-            let newPages = [...pages, {'name': val}];
+        if (val) {
+            let newPages = [...pages, { 'name': val }];
             setPages(newPages);
             setCurrentPage(newPages.length - 1);
         }
         document.getElementById('new_page_input').value = '';
     }
-    
+
     const onDeletePage = () => {
         let newPages = [...pages];
         newPages.splice(currentPage, 1);
@@ -102,20 +102,20 @@ export default function ConfigurationEditor() {
     }
 
     const updateLayoutOnPages = (layout, layoutItem = null) => {
-        if(layoutItem){
+        if (layoutItem) {
             const index = layout.findIndex(item => item['i'] === layoutItem['i']);
             setSelectedComponent(index);
         }
         let newPages = [...pages];
-        newPages[currentPage] = {...newPages[currentPage], "layout": layout}
+        newPages[currentPage] = { ...newPages[currentPage], "layout": layout }
         setPages(newPages);
     }
 
     const onDrop = (layout, layoutItem) => {
         let newLayout = pages[currentPage].layout ? [...pages[currentPage].layout] : [];
         const uuid = crypto.randomUUID();
-        layoutItem['i'] = draggingFromOutside+'|'+uuid;
-        layoutItem['w'] = Math.floor(config.columns/ 10);
+        layoutItem['i'] = draggingFromOutside + '|' + uuid;
+        layoutItem['w'] = Math.floor(config.columns / 10);
         layoutItem['h'] = Math.floor(config.rows / 10);
         draggingFromOutside = null;
         newLayout.push(layoutItem);
@@ -124,7 +124,7 @@ export default function ConfigurationEditor() {
 
     const savePages = () => {
         setLoading(true);
-        pbClient.collection('configurations').update(config.id, {"pages": pages}).then((config) => {
+        pbClient.collection('configurations').update(config.id, { "pages": pages }).then((config) => {
             setConfig(config);
             setPages(config.pages);
             setLoading(false);
@@ -133,7 +133,7 @@ export default function ConfigurationEditor() {
 
     const saveFiles = (files) => {
         setLoading(true);
-        pbClient.collection('configurations').update(config.id, {"files": files}).then((config) => {
+        pbClient.collection('configurations').update(config.id, { "files": files }).then((config) => {
             setConfig(config);
             setLoading(false);
         })
@@ -141,8 +141,8 @@ export default function ConfigurationEditor() {
 
     const onUpdatePropValues = (i) => (key, value) => {
         let newPages = [...pages];
-        newPages[currentPage]['propValues'] = {...newPages[currentPage]['propValues']};
-        newPages[currentPage]['propValues'][i] = {...newPages[currentPage]['propValues'][i]}
+        newPages[currentPage]['propValues'] = { ...newPages[currentPage]['propValues'] };
+        newPages[currentPage]['propValues'][i] = { ...newPages[currentPage]['propValues'][i] }
         newPages[currentPage]['propValues'][i][key] = value;
         setPages(newPages);
     }
@@ -151,7 +151,7 @@ export default function ConfigurationEditor() {
         setLoading(true);
         const kioskId = document.getElementById('kiosk_select').value;
         const configId = config.id;
-        pbClient.collection('kiosks').update(kioskId, {"configuration": configId}).then(() => setLoading(false))
+        pbClient.collection('kiosks').update(kioskId, { "configuration": configId }).then(() => setLoading(false))
     }
 
     const onDeleteComponent = () => {
@@ -197,24 +197,24 @@ export default function ConfigurationEditor() {
                     <HStack
                         {...widget_common_styles}
                     >
-                        <Input 
+                        <Input
                             id="new_page_input"
                             placeholder="New Page Name"
                             onKeyDown={(e) => {
-                                if(e.key === 'Enter') createNewPage();
+                                if (e.key === 'Enter') createNewPage();
                             }}
                             variant={'unstyled'}
                             mx={2}
                         />
-                        <IconButton variant={'ghost'} colorScheme="blue" icon={<AddIcon/>} onClick={createNewPage} />
+                        <IconButton variant={'ghost'} colorScheme="blue" icon={<AddIcon />} onClick={createNewPage} />
                     </HStack>
                     <HStack
                         {...widget_common_styles}
                     >
                         <Tooltip label={'Delete Page'}>
-                            <IconButton colorScheme="red" variant={'ghost'} icon={<DeleteIcon/>} isDisabled={currentPage <= 0} onClick={onDeletePage} />
+                            <IconButton colorScheme="red" variant={'ghost'} icon={<DeleteIcon />} isDisabled={currentPage <= 0} onClick={onDeletePage} />
                         </Tooltip>
-                        <Select 
+                        <Select
                             placeholder="Select a Page"
                             value={currentPage}
                             onChange={(e) => setCurrentPage(e.target.value)}
@@ -231,7 +231,7 @@ export default function ConfigurationEditor() {
                         flexGrow={1}
                         p={2}
                         overflowY={'auto'}
-                        overflowX={'hidden'}                        
+                        overflowX={'hidden'}
                         {...widget_common_styles}
                     >
                         {
@@ -243,11 +243,11 @@ export default function ConfigurationEditor() {
                                         draggable={true}
                                         onDragStart={(e) => draggingFromOutside = componentKey}
                                         unselectable="on"
-                                        style={{height: '100%'}}
+                                        style={{ height: '100%' }}
                                     >
                                         <Flex
                                             h={'100%'}
-                                            alignItems={'center'} 
+                                            alignItems={'center'}
                                             justifyContent={'center'}
                                         >
                                             {componentKey}
@@ -258,17 +258,17 @@ export default function ConfigurationEditor() {
                             })
                         }
                     </Flex>
-                    <Button 
-                        isDisabled={previewLoading} 
-                        leftIcon={previewLoading ? <Spinner size={'sm'}/> :<ExternalLinkIcon/>}
+                    <Button
+                        isDisabled={previewLoading}
+                        leftIcon={previewLoading ? <Spinner size={'sm'} /> : <ExternalLinkIcon />}
                         onClick={() => window.open('/kiosk/_preview_kiosk_/', '_blank').focus()}
                     >
                         Open Preview
                     </Button>
-                </Stack>                
+                </Stack>
                 <Flex id="layoutContainer" flexGrow={1} alignItems={'center'} justifyContent={'center'}>
                     <Box id="scaledContainer" w={adjustedWidth} h={adjustedHeight}>
-                        {!loading ? 
+                        {!loading ?
                             <Box id="LayoutBox" key={currentPage} borderWidth={2} w={adjustedWidth} h={adjustedHeight} {...widget_common_styles}>
                                 {currentPage != '' && currentPage >= 0 ? <ReactGridLayout
                                     className="layout"
@@ -284,8 +284,8 @@ export default function ConfigurationEditor() {
                                     rows={config.rows}
                                     maxRows={config.rows}
                                     rowHeight={10 * scaleFactor}
-                                    containerPadding={[0,0]}
-                                    margin={[0,0]}
+                                    containerPadding={[0, 0]}
+                                    margin={[0, 0]}
                                     allowOverlap={true}
                                     isDroppable={true}
                                     style={{
@@ -299,14 +299,14 @@ export default function ConfigurationEditor() {
                                             const DyanmicComponent = componentMap[componentName][0];
                                             const props = pages[currentPage]?.propValues && pages[currentPage]?.propValues[component['i']] ? pages[currentPage]?.propValues[component['i']] : null;
                                             return <Box key={component['i']} borderWidth={selectedComponent === index ? 2 : 0} h={'100%'} w={'100%'}>
-                                                    <DyanmicComponent {...component} scaleFactor={scaleFactor} {...props}/>
+                                                <DyanmicComponent {...component} scaleFactor={scaleFactor} {...props} />
                                             </Box>
                                         })
 
                                     }
                                 </ReactGridLayout> : <Flex h={'100%'} w={'100%'} alignItems={'center'} justifyContent={'center'}>Choose a page to begin</Flex>}
-                            </Box> 
-                            : <Spinner size={'xl'}/>}
+                            </Box>
+                            : <Spinner size={'xl'} />}
                     </Box>
                 </Flex>
                 <VStack
@@ -318,53 +318,54 @@ export default function ConfigurationEditor() {
                 >
                     <HStack alignItems={'center'} justifyContent={'end'}>
                         <Tooltip label={'Clear Selection'}>
-                            <IconButton flexGrow={1} colorScheme="orange" variant={'outline'} icon={<SmallCloseIcon/>} isDisabled={selectedComponent < 0} onClick={() => setSelectedComponent(-1)}/>
+                            <IconButton flexGrow={1} colorScheme="orange" variant={'outline'} icon={<SmallCloseIcon />} isDisabled={selectedComponent < 0} onClick={() => setSelectedComponent(-1)} />
                         </Tooltip>
                         <Tooltip label='Bring Forward'>
-                            <IconButton flexGrow={1} colorScheme="blue" variant={'outline'} icon={<ArrowUpIcon/>} isDisabled={selectedComponent < 0} onClick={bringFoward} />
+                            <IconButton flexGrow={1} colorScheme="blue" variant={'outline'} icon={<ArrowUpIcon />} isDisabled={selectedComponent < 0} onClick={bringFoward} />
                         </Tooltip>
                         <Tooltip label={'Push Backward'}>
-                            <IconButton flexGrow={1} colorScheme="blue" variant={'outline'}  icon={<ArrowDownIcon/>} isDisabled={selectedComponent < 0} onClick={pushBackward} />
+                            <IconButton flexGrow={1} colorScheme="blue" variant={'outline'} icon={<ArrowDownIcon />} isDisabled={selectedComponent < 0} onClick={pushBackward} />
                         </Tooltip>
                         <Tooltip label={'Delete Component'}>
-                            <IconButton flexGrow={1} colorScheme="red" icon={<DeleteIcon/>} isDisabled={selectedComponent < 0} onClick={onDeleteComponent} />
+                            <IconButton flexGrow={1} colorScheme="red" icon={<DeleteIcon />} isDisabled={selectedComponent < 0} onClick={onDeleteComponent} />
                         </Tooltip>
                     </HStack>
-                        <Box
-                            flexGrow={1}
-                            overflowY={'auto'}
-                            p={2}
-                            mb={2}
-                            minH={'200px'}
-                            {...widget_common_styles}
-                        >
-                            {pages?.length >= 0 && pages[currentPage]?.layout && selectedComponent >= 0 ? 
-                                <PropFormComponent
-                                    config={config}
-                                    componentId={pages[currentPage]?.layout[selectedComponent]['i']}
-                                    propMap={componentMap[pages[currentPage]?.layout[selectedComponent]['i'].split('|')[0]][1]}
-                                    propValues={pages[currentPage]?.propValues ? pages[currentPage].propValues[pages[currentPage]?.layout[selectedComponent]['i']] : {}}
-                                    onUpdatePropValues={onUpdatePropValues(pages[currentPage]?.layout[selectedComponent]['i'])}
-                                />                    
+                    <Box
+                        flexGrow={1}
+                        overflowY={'auto'}
+                        p={2}
+                        maxH={"calc(45% - 1rem)"}
+                        minH={"calc(45% - 1rem)"}
+                        {...widget_common_styles}
+                    >
+                        {pages?.length >= 0 && pages[currentPage]?.layout && selectedComponent >= 0 ?
+                            <PropFormComponent
+                                config={config}
+                                componentId={pages[currentPage]?.layout[selectedComponent]['i']}
+                                propMap={componentMap[pages[currentPage]?.layout[selectedComponent]['i'].split('|')[0]][1]}
+                                propValues={pages[currentPage]?.propValues ? pages[currentPage].propValues[pages[currentPage]?.layout[selectedComponent]['i']] : {}}
+                                onUpdatePropValues={onUpdatePropValues(pages[currentPage]?.layout[selectedComponent]['i'])}
+                            />
                             : <Flex h={'100%'} w={'100%'} alignItems={'center'} justifyContent={'center'}>No component selected</Flex>}
-                        </Box>
-                        <Box
-                            flexGrow={1}
-                            overflowY={'auto'}
-                            p={2}
-                            {...widget_common_styles}
-                        >
-                            <FileUploadComponent files={config.files} saveFiles={saveFiles} />
-                        </Box>
+                    </Box>
+                    <Box
+                        flexGrow={1}
+                        overflowY={'auto'}
+                        p={2}
+                        {...widget_common_styles}
+                        maxH={"calc(45% - 1rem)"}
+                    >
+                        <FileUploadComponent files={config.files} saveFiles={saveFiles} />
+                    </Box>
                     <Flex>
                         <Tooltip label='Save configuration'>
-                            <IconButton mr={2} colorScheme={'blue'} variant={'outline'} icon={<BsFloppy/>} onClick={savePages} />
+                            <IconButton mr={2} colorScheme={'blue'} variant={'outline'} icon={<BsFloppy />} onClick={savePages} />
                         </Tooltip>
                         <Select id="kiosk_select" flexGrow={1}>
                             {kiosks?.map((k) => <option key={k.id} value={k.id} >{k.name} kiosk</option>)}
                         </Select>
                         <Tooltip label='Push to Kiosk'>
-                            <IconButton ml={2} colorScheme={'blue'} icon={<ArrowRightIcon/>} onClick={pushToKiosk} />
+                            <IconButton ml={2} colorScheme={'blue'} icon={<ArrowRightIcon />} onClick={pushToKiosk} />
                         </Tooltip>
                     </Flex>
                 </VStack>
