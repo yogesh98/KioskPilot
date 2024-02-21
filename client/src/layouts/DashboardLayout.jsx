@@ -7,7 +7,6 @@ export default function DashboardLayout() {
     const location = useLocation();
     const navigate = useNavigate();
     useEffect(() => {
-        console.log(location.pathname)
         if(location.pathname === '/dashboard/' || location.pathname === '/dashboard'){
             navigate("cms")
         }
