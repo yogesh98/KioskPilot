@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Box, Button, Flex, HStack, IconButton, Input, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, HStack, IconButton, Input, Text, VStack } from "@chakra-ui/react";
 import { DeleteIcon } from "@chakra-ui/icons";
 
 export default function FileUploadComponent({files, saveFiles}) {
@@ -16,28 +16,29 @@ export default function FileUploadComponent({files, saveFiles}) {
     }
 
     return (<>
-		<Flex h={'100%'} w={'100%'} minH={'200px'} flexDir={'column'}>
+		<Flex h={'100%'} w={'100%'} minH={'200px'} flexDir={'column'} overflowY={'auto'}>
             <Box maxW={'100%'} mb={2}>
                 <input id="file_upload_input" type="file" ref={fileUploadRef} onChange={onFileChange} style={{display: 'none', overflowX: 'hidden'}}/>
                 {fileUploadRef.current ? <Button color="primary" onClick={() => fileUploadRef.current.click()}>
                     Upload
                 </Button> : null}
             </Box>
-            {files ? 
-                
+            <VStack>
+                {files ? 
                     files.map((file, index) => {
                         return (
-                            <HStack key={file} maxW={'100%'}>
-                                <Box>
+                            <HStack key={file}>
+                                <Text>
                                     {file}
-                                </Box>
+                                </Text>
                                 <IconButton colorScheme="red" variant={'ghost'} icon={<DeleteIcon/>} onClick={() => onDeleteFile(index)}/>
                             </HStack>
                         );
                     })
                 
 
-            : null }
+                : null }
+            </VStack>
         </Flex>
   	</>);
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Flex, FormControl, FormLabel, Input, Select, VStack } from "@chakra-ui/react";
 
 
-export default function PropFormComponent({componentId, propMap, propValues, onUpdatePropValues}) {
+export default function PropFormComponent({config, componentId, propMap, propValues, onUpdatePropValues}) {
 
 	const renderQuestion = (propMap, key) => {
 		return (<>
@@ -15,6 +15,15 @@ export default function PropFormComponent({componentId, propMap, propValues, onU
 						onChange={(e) => onUpdatePropValues(key, e.target.value)}
 					>
 						{Object.keys(propMap[key]?.options ?? {}).map((val, index) => <option key={val} value={val} >{propMap[key].options[val]}</option>)}
+					</Select>
+				: null}
+				{propMap[key]?.inputType === 'file' ? 
+					<Select 
+						{...propMap[key]?.componentProps} 
+						value={propValues && propValues[key]? propValues[key] : ''}
+						onChange={(e) => onUpdatePropValues(key, e.target.value)}
+					>
+						{(config?.files ?? []).map((val) => <option key={val} value={import.meta.env.VITE_POCKET_BASE_SERVER_URL+'api/files/'+config.collectionId+'/'+config.id+'/'+val} >{val}</option>)}
 					</Select>
 				: null}
 		</>);

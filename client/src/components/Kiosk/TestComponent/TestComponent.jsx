@@ -1,6 +1,13 @@
 import { Box, Flex } from "@chakra-ui/react";
 
 export const propMap = {
+    'selectedFile': {
+        'label': 'Select A file',
+        'inputType': 'file',
+        'componentProps': {
+            'placeholder': 'select a file',
+        },    
+    },
     'propName': {
         'label': 'human readable label',
         'inputType': 'input',
