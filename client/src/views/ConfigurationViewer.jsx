@@ -28,8 +28,6 @@ export default function ConfigurationViewer() {
 
         return () => pbClient.collection('configurations').unsubscribe();
     },[pbClient, params.kioskId]);
-    console.log(config);
-    if(config)
     return (
     <>
       {config  ? <Box align="center" justify="center" h={config.height} w={config.width} outline={'5px dotted black'}>
