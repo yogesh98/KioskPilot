@@ -156,7 +156,10 @@ export default function ConfigurationEditor() {
 
     const onDeleteComponent = () => {
         let newPages = [...pages];
-        delete newPages[currentPage]['propValues'][pages[currentPage].layout[selectedComponent]['i']]
+        try {
+            delete newPages[currentPage]['propValues'][pages[currentPage].layout[selectedComponent]['i']]
+        } catch(e){
+        }
         newPages[currentPage].layout.splice(selectedComponent, 1);
         setSelectedComponent(-1);
         setPages(newPages);
@@ -232,6 +235,7 @@ export default function ConfigurationEditor() {
                         p={2}
                         overflowY={'auto'}
                         overflowX={'hidden'}
+                        justifyContent={'space-between'}
                         {...widget_common_styles}
                     >
                         {
