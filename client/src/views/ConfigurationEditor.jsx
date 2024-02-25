@@ -191,6 +191,7 @@ export default function ConfigurationEditor() {
                 id="configurationEditorBoundingBox"
                 borderRadius={'15px'}
                 h={'100%'}
+                overflow={'hidden'}
             >
                 <Stack
                     minW={'300px'}

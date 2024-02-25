@@ -37,7 +37,7 @@ export const propMap = {
     "bgRepeat" : {
         'label': 'Repeat',
         'inputType': 'select',
-        'componentProps': { // props that go into the input type
+        'componentProps': {
             'placeholder': 'select an option',
         },
         'options': {
