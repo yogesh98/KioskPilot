@@ -233,15 +233,15 @@ export default function ConfigurationEditor() {
                     </HStack>
                     <Flex
                         flexGrow={1}
-                        p={2}
                         overflowY={'auto'}
                         overflowX={'hidden'}
                         justifyContent={'space-between'}
+                        flexWrap={'wrap'}
                         {...widget_common_styles}
                     >
                         {
                             Object.keys(componentMap).map((componentKey) => {
-                                return (<Box key={componentKey} h={'25%'} w={'45%'} borderRadius={'md'} borderWidth={2} bgColor={useColorModeValue('gray.300', 'gray.700')}
+                                return (<Box key={componentKey} h={'25%'} w={'40%'} borderRadius={'md'} borderWidth={2} m={2} bgColor={useColorModeValue('gray.300', 'gray.700')}
                                 >
                                     <div
                                         className="droppable-element"
