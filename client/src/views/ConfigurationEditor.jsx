@@ -49,11 +49,7 @@ export default function ConfigurationEditor() {
                     scaleFactor = containerRect.height / config.height;
                 }
                 let adjustedScaleFactor = scaleFactor;
-                if (scaleFactor > 1) {
-                    adjustedScaleFactor = Math.floor(scaleFactor / 100) * 100
-                } else {
-                    adjustedScaleFactor = Math.floor(scaleFactor * 100) / 100
-                }
+                adjustedScaleFactor = Math.floor(scaleFactor * 100) / 100
                 setScaleFactor(adjustedScaleFactor);
                 setConfig(config);
                 setPages(config.pages);
@@ -115,8 +111,8 @@ export default function ConfigurationEditor() {
         let newLayout = pages[currentPage].layout ? [...pages[currentPage].layout] : [];
         const uuid = crypto.randomUUID();
         layoutItem['i'] = draggingFromOutside + '|' + uuid;
-        layoutItem['w'] = Math.floor(config.columns / 10);
-        layoutItem['h'] = Math.floor(config.rows / 10);
+        layoutItem['w'] = Math.floor(config.columns > 10 ? config.columns / 10 : 1);
+        layoutItem['h'] = Math.floor(config.rows > 10 ? config.rows / 10 : 1);
         draggingFromOutside = null;
         newLayout.push(layoutItem);
         updateLayoutOnPages(newLayout, layoutItem);
