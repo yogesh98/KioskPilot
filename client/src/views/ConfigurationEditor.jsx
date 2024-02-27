@@ -270,7 +270,7 @@ export default function ConfigurationEditor() {
                 <Flex id="layoutContainer" flexGrow={1} alignItems={'center'} justifyContent={'center'}>
                     <Box id="scaledContainer" w={adjustedWidth} h={adjustedHeight}>
                         {!loading ?
-                            <Box id="LayoutBox" key={currentPage} borderWidth={2} w={adjustedWidth} h={adjustedHeight} {...widget_common_styles}>
+                            <Box id="LayoutBox" key={currentPage} outline={'2px solid #ffffff29'} w={adjustedWidth} h={adjustedHeight} {...widget_common_styles} borderWidth={0}>
                                 {currentPage != '' && currentPage >= 0 ? <ReactGridLayout
                                     className="layout"
                                     autoSize={false}
@@ -299,11 +299,10 @@ export default function ConfigurationEditor() {
                                             const [componentName] = component['i'].split('|');
                                             const DyanmicComponent = componentMap[componentName][0];
                                             const props = pages[currentPage]?.propValues && pages[currentPage]?.propValues[component['i']] ? pages[currentPage]?.propValues[component['i']] : null;
-                                            return <Box key={component['i']} borderWidth={selectedComponent === index ? 2 : 0} h={'100%'} w={'100%'}>
+                                            return <Box key={component['i']} outline={selectedComponent === index ? '2px solid #ffffff29' : ''} h={'100%'} w={'100%'}>
                                                 <DyanmicComponent {...component} scaleFactor={scaleFactor} {...props} />
                                             </Box>
                                         })
-
                                     }
                                 </ReactGridLayout> : <Flex h={'100%'} w={'100%'} alignItems={'center'} justifyContent={'center'}>Choose a page to begin</Flex>}
                             </Box>
