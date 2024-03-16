@@ -35,6 +35,8 @@ export default function ConfigurationEditor() {
     let timeout = null;
 
     const refreshConfig = useCallback(() => {
+        setSelectedComponent(0);
+        setCurrentPage('');
         pbClient.collection('configurations').getOne(params.configurationId).then((config) => {
             const layoutContainer = document.getElementById('layoutContainer');
             if (layoutContainer && config.height && config.width) {
@@ -70,7 +72,6 @@ export default function ConfigurationEditor() {
             delete (previewConfig['id']);
             delete (previewConfig['collectionId']);
             delete (previewConfig['collectionName']);
-            previewConfig['id'] = '_preview_config';
             previewConfig['pages'] = pages;
             previewConfig['files'] = [];
             pbClient.collection('configurations').update('_preview_config', previewConfig).then(() => {
@@ -338,7 +339,7 @@ export default function ConfigurationEditor() {
                         minH={"calc(45% - 1rem)"}
                         {...widget_common_styles}
                     >
-                        {pages?.length >= 0 && pages[currentPage]?.layout && selectedComponent >= 0 ?
+                        {pages?.length >= 0 && pages[currentPage]?.layout && selectedComponent >= 0 && pages[currentPage]?.layout[selectedComponent] ?
                             <PropFormComponent
                                 config={config}
                                 componentId={pages[currentPage]?.layout[selectedComponent]['i']}
