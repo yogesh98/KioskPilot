@@ -76,7 +76,7 @@ export default function ConfigurationViewer() {
   return (
     <>
       {config ? (
-        <Box align="center" justify="center" h={config.height} w={config.width} outline={'5px dotted black'} ref={scope}>
+        <Box align="center" justify="center" h={config.height} w={config.width} /*outline={'5px dotted black'}*/ ref={scope}>
           <ReactGridLayout
             className="layout"
             width={config.width}
