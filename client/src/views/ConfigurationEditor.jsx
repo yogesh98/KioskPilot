@@ -154,7 +154,7 @@ export default function ConfigurationEditor() {
         let newPages = [...pages];
         try {
             delete newPages[currentPage]['propValues'][pages[currentPage].layout[selectedComponent]['i']]
-        } catch(e){
+        } catch (e) {
         }
         newPages[currentPage].layout.splice(selectedComponent, 1);
         setSelectedComponent(-1);
@@ -300,7 +300,7 @@ export default function ConfigurationEditor() {
                                             const DyanmicComponent = componentMap[componentName][0];
                                             const props = pages[currentPage]?.propValues && pages[currentPage]?.propValues[component['i']] ? pages[currentPage]?.propValues[component['i']] : null;
                                             return <Box key={component['i']} outline={selectedComponent === index ? '2px solid #ffffff29' : ''} h={'100%'} w={'100%'}>
-                                                <DyanmicComponent {...component} scaleFactor={scaleFactor} {...props} />
+                                                <DyanmicComponent {...component} pages={pages.map(v => v.name)} scaleFactor={scaleFactor} {...props} />
                                             </Box>
                                         })
                                     }
@@ -341,10 +341,11 @@ export default function ConfigurationEditor() {
                         {pages?.length >= 0 && pages[currentPage]?.layout && selectedComponent >= 0 ?
                             <PropFormComponent
                                 config={config}
-                                componentId={pages[currentPage]?.layout[selectedComponent]['i']}
-                                propMap={componentMap[pages[currentPage]?.layout[selectedComponent]['i'].split('|')[0]][1]}
-                                propValues={pages[currentPage]?.propValues ? pages[currentPage].propValues[pages[currentPage]?.layout[selectedComponent]['i']] : {}}
-                                onUpdatePropValues={onUpdatePropValues(pages[currentPage]?.layout[selectedComponent]['i'])}
+                                currentPage={pages[currentPage]?.name}
+                                componentId={pages[currentPage]?.layout[selectedComponent]?.['i']}
+                                propMap={componentMap[pages[currentPage]?.layout[selectedComponent]?.['i'].split('|')[0]][1]}
+                                propValues={pages[currentPage]?.propValues ? pages[currentPage].propValues[pages[currentPage]?.layout[selectedComponent]?.['i']] : {}}
+                                onUpdatePropValues={onUpdatePropValues(pages[currentPage]?.layout[selectedComponent]?.['i'])}
                             />
                             : <Flex h={'100%'} w={'100%'} alignItems={'center'} justifyContent={'center'}>No component selected</Flex>}
                     </Box>

@@ -6,9 +6,9 @@ export const propMap = {
         'inputType': 'file',
         'componentProps': {
             'placeholder': 'Select an Image',
-        },    
+        },
     },
-    "bgSize" : {
+    "bgSize": {
         'label': 'Size',
         'inputType': 'select',
         'componentProps': { // props that go into the input type
@@ -20,7 +20,7 @@ export const propMap = {
             'cover': 'cover',
         }
     },
-    "bgPosition" : {
+    "bgPosition": {
         'label': 'Position',
         'inputType': 'select',
         'componentProps': { // props that go into the input type
@@ -30,11 +30,11 @@ export const propMap = {
             'bottom': 'bottom',
             'top': 'top',
             'center': 'center',
-            'left': 'left' ,
+            'left': 'left',
             'right': 'right',
         }
     },
-    "bgRepeat" : {
+    "bgRepeat": {
         'label': 'Repeat',
         'inputType': 'select',
         'componentProps': {
@@ -48,24 +48,24 @@ export const propMap = {
     },
 };
 
-export default function ImageComponent({scaleFactor, selectedImage, bgSize, bgPosition, bgRepeat}) {
-    const scaleFactorAsPercentage = (scaleFactor > 1 ? 1 : -1) * (scaleFactor * 100); 
+export default function ImageComponent({ scaleFactor, selectedImage, bgSize, bgPosition, bgRepeat }) {
+    const scaleFactorAsPercentage = (scaleFactor > 1 ? 1 : -1) * (scaleFactor * 100);
     return (
         <>
             {
-                selectedImage ? 
-                <Box
-                    bgImage={selectedImage}
-                    bgSize={bgSize ? bgSize : 'auto'}
-                    h={'100%'}
-                    bgPosition={bgPosition ? bgPosition : 'center'}
-                    bgRepeat={bgRepeat ? bgRepeat : 'repeat'}
-                >
-                    
-                </Box>
-                :<Box>
-                    Select an Image
-                </Box>
+                selectedImage ?
+                    <Box
+                        bgImage={selectedImage}
+                        bgSize={bgSize ? bgSize : 'auto'}
+                        h={'100%'}
+                        bgPosition={bgPosition ? bgPosition : 'center'}
+                        bgRepeat={bgRepeat ? bgRepeat : 'repeat'}
+                    >
+
+                    </Box>
+                    : <Box>
+                        Select an Image
+                    </Box>
             }
         </>
     );

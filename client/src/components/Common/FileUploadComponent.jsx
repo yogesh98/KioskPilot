@@ -27,7 +27,7 @@ export default function FileUploadComponent({ files, saveFiles }) {
                 {files ?
                     files.map((file, index) => {
                         return (
-                            <HStack key={file} maxW={"100%"}>
+                            <HStack ml={2} key={file} maxW={"100%"}>
                                 <Text overflow={"hidden"} textOverflow={"ellipsis"} whiteSpace={"nowrap"}>
                                     {file}
                                 </Text>
