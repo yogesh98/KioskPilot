@@ -282,6 +282,7 @@ export default function ConfigurationEditor() {
                                     onResizeStop={updateLayoutOnPages}
                                     onDrop={onDrop}
                                     compactType={null}
+                                    useCSSTransforms={false}
                                     cols={config.columns}
                                     rows={config.rows}
                                     maxRows={config.rows}

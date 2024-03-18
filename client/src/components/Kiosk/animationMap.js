@@ -35,27 +35,67 @@ export const viewAnimations = {
     }
 };
 
-export const componentAnimations = {
-    'swipeDown' : {
-        'initial': {
-            'position':'fixed',
-            'w':'100%',
-            'h':'100%',
-            'y':'-100%',
-        },
+export const externalBoxAnimations = {
+    'swipeUp' : {
+        'initial': {position:'fixed', backgroundColor:'black', zIndex:'2', height:'100vh', width:'100vw', right:'0', bottom:'-100vh'},
         'enter': {
-            'to': {
-                'y': '-100%',
-            },
-            'options': { duration: 0.5, autoplay:true}
-        },
-        'exit': {
             'to': {
                 'y': '0%',
             },
+            'options': { delay: 0.25, duration: 0.5, autoplay:true}
+        },
+        'exit': {
+            'to': {
+                'y': '-100%',
+            },
+            'options': { delay: 0.25, duration: 0.5, autoplay:true}
+        }
+    },
+    'swipeDown' : {
+        'initial': {position:'fixed', backgroundColor:'black', zIndex:'2', height:'100vh', width:'100vw', right:'0', top:'-100vh'},
+        'enter': {
+            'to': {
+                'y': '0%',
+            },
+            'options': { delay: 0.25, duration: 0.5, autoplay:true}
+        },
+        'exit': {
+            'to': {
+                'y': '100%',
+            },
+            'options': { delay: 0.25, duration: 0.5, autoplay:true}
+        }
+    },
+    'swipeLeft' : {
+        'initial': {position:'fixed', backgroundColor:'black', zIndex:'2', height:'100vh', width:'100vw', right:'-100vw', top:'0'},
+        'enter': {
+            'to': {
+                'x': '0%',
+            },
+            'options': { delay: 0.25, duration: 0.5, autoplay:true}
+        },
+        'exit': {
+            'to': {
+                'x': '-100%',
+            },
             'options': { duration: 0.5, autoplay:true}
         }
-    }
+    },
+    'swipeRight' : {
+        'initial': {position:'fixed', backgroundColor:'black', zIndex:'2', height:'100vh', width:'100vw', left:'-100vw', top:'0'},
+        'enter': {
+            'to': {
+                'x': '0%',
+            },
+            'options': { delay: 0.25, duration: 0.5, autoplay:true}
+        },
+        'exit': {
+            'to': {
+                'x': '100%',
+            },
+            'options': { duration: 0.5, autoplay:true}
+        }
+    },
 }
 export const navigateToForm = {
         'label': 'Navigate to Page',
@@ -74,7 +114,7 @@ export const navigateToForm = {
                     },
                     'options': {
                         'viewAnimations': 'View Animations',
-                        'componentAnimations': 'Component Animations',
+                        'externalBoxAnimations': 'External Animations',
                     },
                     'follow_up_questions':{
                         'viewAnimations': {
@@ -87,14 +127,14 @@ export const navigateToForm = {
                                 'options': (Object.keys(viewAnimations)).reduce((obj, key) => {return {...obj, [key]:key}}, {})
                             }
                         },
-                        'componentAnimations': {
+                        'externalBoxAnimations': {
                             'animationName':{
                                 'label': 'Animation',
                                 'inputType': 'select',
                                 'componentProps': {
                                     'placeholder': 'select an animation',
                                 },
-                                'options': (Object.keys(componentAnimations)).reduce((obj, key) => {return {...obj, [key]:key}}, {})
+                                'options': (Object.keys(externalBoxAnimations)).reduce((obj, key) => {return {...obj, [key]:key}}, {})
                             }
                         }
                     }

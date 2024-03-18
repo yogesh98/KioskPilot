@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Box, layout } from "@chakra-ui/react";
 import { useClientContext } from "@yogeshp98/pocketbase-react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { animate, useAnimate } from "framer-motion";
+import { useAnimate } from "framer-motion";
 
 import componentMap from "../components/Kiosk/componentMap";
-import { viewAnimations, componentAnimations } from "../components/Kiosk/animationMap";
+import { viewAnimations, externalBoxAnimations } from "../components/Kiosk/animationMap";
 
 import RGL, { WidthProvider } from "react-grid-layout";
 import 'react-grid-layout/css/styles.css';
@@ -16,7 +16,7 @@ export default function ConfigurationViewer() {
   const params = useParams();
   const pbClient = useClientContext();
   const [viewScope, viewAnimate] = useAnimate();
-  const [componentScope, componentAnimate] = useAnimate();
+  const [externalBoxScope, externalBoxAnimate] = useAnimate();
   const [currentAnimation, setCurrentAnimation] = useState();
   const [config, setConfig] = useState(null);
   const navigate = useNavigate();
@@ -37,7 +37,7 @@ export default function ConfigurationViewer() {
   useEffect(() => {
     if(currentAnimation?.animationType && currentAnimation?.animationName){
       console.log(currentAnimation);
-      playAnimation(currentAnimation.animationType, eval(currentAnimation.animationType)[currentAnimation['animationName']]['enter']).then(() => setCurrentAnimation(null));
+      playAnimation(currentAnimation.animationType, eval(currentAnimation.animationType)[currentAnimation['animationName']], 'enter').then(() => setCurrentAnimation(null));
     }
   }, [params.pageIndex])
 
@@ -46,27 +46,35 @@ export default function ConfigurationViewer() {
     path.pop();
     if(withAnimation?.animationType && withAnimation?.animationName){
       setCurrentAnimation(withAnimation);
-      playAnimation(withAnimation.animationType, eval(withAnimation.animationType)[withAnimation['animationName']]['exit']).then(() => navigate(path.join('/') + '/' + index));
+      playAnimation(withAnimation.animationType, eval(withAnimation.animationType)[withAnimation['animationName']], 'exit').then(() => navigate(path.join('/') + '/' + index));
     } else {
       navigate(path.join('/') + '/' + index);
     }
   }
 
 
-  const playAnimation = (animationType, animation) => {
+  const playAnimation = (animationType, animation, enterOrExit) => {
+      let scope = null;
+      let animate = null;
       if(animationType === 'viewAnimations'){
-        return viewAnimate(viewScope.current, animation['to'], animation['options']);
-      } else if (animationType === 'componentAnimations'){
-        return componentAnimate(componentScope.current, animation['to'], animation['options']);
+        scope = viewScope;
+        animate = viewAnimate;
+      } else if (animationType === 'externalBoxAnimations'){
+        scope = externalBoxScope;
+        animate = externalBoxAnimate;
       }
-      return Promise.resolve(null);
+      
+      if(scope) {
+        return animate(scope.current, animation[enterOrExit]['to'], animation[enterOrExit]['options']);
+      }
+      return Promise.resolve(false);
   }
 
   return (
     <>
-      <Box ref={componentScope} zIndex={2} bg={'black'} {...(currentAnimation?.animationType ? eval(currentAnimation.animationType)[currentAnimation['animationName']]['initial'] : {})}/>
       {config ? (
         <Box align="center" justify="center" h={config.height} w={config.width} overflow={'hidden'} /*outline={'5px dotted black'}*/>
+          <div id="animation-component" ref={externalBoxScope} style={currentAnimation?.animationType ? eval(currentAnimation.animationType)[currentAnimation['animationName']]['initial'] : {}}/>
           <Box ref={viewScope}>
             <ReactGridLayout
               className="layout"
@@ -76,6 +84,7 @@ export default function ConfigurationViewer() {
                 layoutItem.isDraggable = false;
                 return layoutItem;
               })}
+              useCSSTransforms={false}
               compactType={null}
               cols={config.columns}
               rows={config.rows}
@@ -97,7 +106,7 @@ export default function ConfigurationViewer() {
                   const [componentName] = component['i'].split('|');
                   const DynamicComponent = componentMap[componentName][0];
                   const props = config.pages[params.pageIndex].propValues[component['i']];
-                  const animation = {'animationType': props['animationType'], 'animationName': props['animationName']};
+                  const animation = props?.animationType && props?.animationName ? {'animationType': props?.animationType, 'animationName': props?.animationName} : null;
                   return <Box key={component['i']} h={'100%'} w={'100%'}>
                     <DynamicComponent {...component} pages={config.pages.map(v => v.name)} scaleFactor={1} navigate={navigateToPage(animation)} {...props} />
                   </Box>
