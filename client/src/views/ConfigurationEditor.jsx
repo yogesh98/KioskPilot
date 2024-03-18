@@ -35,6 +35,8 @@ export default function ConfigurationEditor() {
     let timeout = null;
 
     const refreshConfig = useCallback(() => {
+        setSelectedComponent(0);
+        setCurrentPage('');
         pbClient.collection('configurations').getOne(params.configurationId).then((config) => {
             const layoutContainer = document.getElementById('layoutContainer');
             if (layoutContainer && config.height && config.width) {
@@ -70,7 +72,6 @@ export default function ConfigurationEditor() {
             delete (previewConfig['id']);
             delete (previewConfig['collectionId']);
             delete (previewConfig['collectionName']);
-            previewConfig['id'] = '_preview_config';
             previewConfig['pages'] = pages;
             previewConfig['files'] = [];
             pbClient.collection('configurations').update('_preview_config', previewConfig).then(() => {
@@ -334,11 +335,11 @@ export default function ConfigurationEditor() {
                         flexGrow={1}
                         overflowY={'auto'}
                         p={2}
-                        maxH={"calc(45% - 1rem)"}
-                        minH={"calc(45% - 1rem)"}
+                        maxH={"calc(50% - 1rem)"}
+                        minH={"calc(50% - 1rem)"}
                         {...widget_common_styles}
                     >
-                        {pages?.length >= 0 && pages[currentPage]?.layout && selectedComponent >= 0 ?
+                        {pages?.length >= 0 && pages[currentPage]?.layout && selectedComponent >= 0 && pages[currentPage]?.layout[selectedComponent] ?
                             <PropFormComponent
                                 config={config}
                                 currentPage={pages[currentPage]?.name}
@@ -354,7 +355,7 @@ export default function ConfigurationEditor() {
                         overflowY={'auto'}
                         p={2}
                         {...widget_common_styles}
-                        maxH={"calc(45% - 1rem)"}
+                        maxH={"calc(50% - 1rem)"}
                     >
                         <FileUploadComponent files={config.files} saveFiles={saveFiles} />
                     </Box>
