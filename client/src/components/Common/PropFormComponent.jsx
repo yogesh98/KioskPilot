@@ -22,9 +22,9 @@ export default function PropFormComponent({ config, pages, componentId, propMap,
 					value={propValues && propValues[key] ? propValues[key] : ''}
 					onChange={(e) => onUpdatePropValues(key, e.target.value)}
 				>
-					{Object.keys(propMap[key]?.options ?? {}).map((val, index) => <option key={val} value={val} >{propMap[key].options[val]}</option>)}
+					{Object.keys(propMap[key]?.options ?? {}).map((val) => <option key={val} value={val} >{propMap[key].options[val]}</option>)}
 				</Select>
-				: null}
+			: null}
 			{propMap[key]?.inputType === 'file' ?
 				<Select
 					key={'file_' + key}
@@ -34,7 +34,7 @@ export default function PropFormComponent({ config, pages, componentId, propMap,
 				>
 					{(config?.files ?? []).map((val) => <option key={val} value={import.meta.env.VITE_POCKET_BASE_SERVER_URL + 'api/files/' + config.collectionId + '/' + config.id + '/' + val} >{val}</option>)}
 				</Select>
-				: null}
+			: null}
 			{propMap[key]?.inputType === 'pageSelect' ?
 				<Select
 					key={'pageSelect_' + key}
@@ -47,7 +47,31 @@ export default function PropFormComponent({ config, pages, componentId, propMap,
 							{val.name}
 						</option>) : null)}
 				</Select>
-				: null}
+			: null}
+
+			{/*Below is recursive to render all follow up questions*/}
+			{propMap &&
+			propMap[key] &&
+			propMap[key]['follow_up_questions'] &&
+			propValues && propValues[key] &&
+			propMap[key]['follow_up_questions'][propValues[key]] ?
+				<Box key={'follow_up_question_' + key + '|' + componentId + '|'} mb={4} ml={6}>
+					{
+						Object.keys(propMap[key]['follow_up_questions'][propValues[key]]).map((follow_up_key) => renderQuestion(propMap[key]['follow_up_questions'][propValues[key]], follow_up_key))
+					}
+				</Box>
+			: null}
+			{propMap &&
+			propMap[key] &&
+			propMap[key]['follow_up_questions'] &&
+			propValues && propValues[key] &&
+			propMap[key]['follow_up_questions']['SPECIAL_always_show'] ?
+				<Box key={'follow_up_question_always_show_' + key + '|' + componentId} mb={4} ml={6}>
+					{
+						Object.keys(propMap[key]['follow_up_questions']['SPECIAL_always_show']).map((follow_up_key) => renderQuestion(propMap[key]['follow_up_questions']['SPECIAL_always_show'], follow_up_key))
+					}
+				</Box>
+			: null}
 		</>);
 	}
 
@@ -58,28 +82,6 @@ export default function PropFormComponent({ config, pages, componentId, propMap,
 					<Box key={'main_question_' + key + '|' + componentId + '|' + index} mb={4}>
 						{renderQuestion(propMap, key, config)}
 					</Box>
-					{propMap &&
-						propMap[key] &&
-						propMap[key]['follow_up_questions'] &&
-						propValues && propValues[key] &&
-						propMap[key]['follow_up_questions'][propValues[key]] ?
-						<Box key={'follow_up_question_' + key + '|' + componentId + '|' + index} mb={4} ml={6}>
-							{
-								Object.keys(propMap[key]['follow_up_questions'][propValues[key]]).map((follow_up_key) => renderQuestion(propMap[key]['follow_up_questions'][propValues[key]], follow_up_key))
-							}
-						</Box>
-					: null}
-					{propMap &&
-						propMap[key] &&
-						propMap[key]['follow_up_questions'] &&
-						propValues && propValues[key] &&
-						propMap[key]['follow_up_questions']['SPECIAL_always_show'] ?
-						<Box key={'follow_up_question_always_show_' + key + '|' + componentId + '|' + index} mb={4} ml={6}>
-							{
-								Object.keys(propMap[key]['follow_up_questions']['SPECIAL_always_show']).map((follow_up_key) => renderQuestion(propMap[key]['follow_up_questions']['SPECIAL_always_show'], follow_up_key))
-							}
-						</Box>
-					: null}
 				</Box>);
 			})
 		}

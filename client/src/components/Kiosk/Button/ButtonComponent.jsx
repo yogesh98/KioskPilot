@@ -1,5 +1,5 @@
 import { Box, Button, Flex } from "@chakra-ui/react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { navigateToForm } from "../animationMap";
 
 export const propMap = {
     'text': {
@@ -10,29 +10,7 @@ export const propMap = {
             'placeholder': 'Text for button',
         },
     },
-    'navigateTo': {
-        'label': 'Navigate to Page',
-        'inputType': 'pageSelect',
-        'componentProps': {
-            'type': 'text',
-            'placeholder': 'Select a page to go next',
-        },
-        'follow_up_questions': {
-            'SPECIAL_always_show': {
-                'animationType': {
-                    'label': 'Animation Type',
-                    'inputType': 'select',
-                    'componentProps': {
-                        'placeholder': 'select an option',
-                    },
-                    'options': {
-                        'opacity': 'opacity',
-                        'scale': 'scale',
-                    }
-                }
-            }
-        }
-    },
+    'navigateTo': navigateToForm,
     // 'h': {
     //     'label': 'Height Percentage',
     //     'inputType': 'input',

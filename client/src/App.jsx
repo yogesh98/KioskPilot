@@ -32,7 +32,6 @@ function App() {
             </Route>
           </Route>
           <Route path='kiosk/:kioskId/:pageIndex?' element={<ConfigurationViewer />} />
-          {/* <Route path='test' element={<ScaledLayout />}/> */}
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
