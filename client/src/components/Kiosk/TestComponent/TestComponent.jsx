@@ -25,6 +25,19 @@ export const propMap = {
                         'placeholder': 'Text for second prop',
                     },
                 }
+            },
+            'SPECIAL_always_show': { // This is a special follow up key. If any answer is chosen. then these follow up questions will show up
+                'animationType': {
+                    'label': 'SPECIAL_always_show Label',
+                    'inputType': 'select',
+                    'componentProps': {
+                        'placeholder': 'select an option',
+                    },
+                    'options': {
+                        'opacity': 'opacity',
+                        'scale': 'scale',
+                    }
+                }
             }
         }
     },

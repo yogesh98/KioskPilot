@@ -63,7 +63,7 @@ export default function PropFormComponent({ config, pages, componentId, propMap,
 						propMap[key]['follow_up_questions'] &&
 						propValues && propValues[key] &&
 						propMap[key]['follow_up_questions'][propValues[key]] ?
-						<Box key={'follow_up_question_' + key + '|' + componentId + '|' + index} mb={4}>
+						<Box key={'follow_up_question_' + key + '|' + componentId + '|' + index} mb={4} ml={6}>
 							{
 								Object.keys(propMap[key]['follow_up_questions'][propValues[key]]).map((follow_up_key) => renderQuestion(propMap[key]['follow_up_questions'][propValues[key]], follow_up_key))
 							}
@@ -74,7 +74,7 @@ export default function PropFormComponent({ config, pages, componentId, propMap,
 						propMap[key]['follow_up_questions'] &&
 						propValues && propValues[key] &&
 						propMap[key]['follow_up_questions']['SPECIAL_always_show'] ?
-						<Box key={'follow_up_question_always_show_' + key + '|' + componentId + '|' + index} mb={4}>
+						<Box key={'follow_up_question_always_show_' + key + '|' + componentId + '|' + index} mb={4} ml={6}>
 							{
 								Object.keys(propMap[key]['follow_up_questions']['SPECIAL_always_show']).map((follow_up_key) => renderQuestion(propMap[key]['follow_up_questions']['SPECIAL_always_show'], follow_up_key))
 							}
