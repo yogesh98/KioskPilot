@@ -7,7 +7,7 @@ export const propMap = {
         'inputType': 'input',
         'componentProps': {
             'type': 'text',
-            'placeholder': 'Text for third prop',
+            'placeholder': 'Text for button',
         },
     },
     'navigateTo': {
@@ -18,12 +18,11 @@ export const propMap = {
             'placeholder': 'Select a page to go next',
         },
         'follow_up_questions': {
-            'onSelect': true,
-            0: { // this key is the answer from the parent that causes this one to render.
+            'SPECIAL_always_show': {
                 'animationType': {
                     'label': 'Animation Type',
                     'inputType': 'select',
-                    'componentProps': { // props that go into the input type
+                    'componentProps': {
                         'placeholder': 'select an option',
                     },
                     'options': {
@@ -52,15 +51,16 @@ export const propMap = {
     // },
 };
 
-export default function ButtonComponent({ scaleFactor, text, h, w, navigateTo, pages }) {
-    let navigate = useNavigate();
-    let location = useLocation();
-    const scaleFactorAsPercentage = (scaleFactor > 1 ? 1 : -1) * (scaleFactor * 100);
+export default function ButtonComponent({ 
+        scaleFactor, //Pass from editor or viewer
+        pages, //Pass from editor or viewer
+        navigate, //Pass from editor or viewer (Make sure to implement in both)
+        text, // From prop form
+        navigateTo // From prop form
+    }) {
     const action = () => {
         if (navigateTo) {
-            let path = location.pathname.split('/');
-            path.pop()
-            navigate(path.join('/') + '/' + pages.indexOf(navigateTo));
+            navigate(pages.indexOf(navigateTo));
         }
     }
     return (

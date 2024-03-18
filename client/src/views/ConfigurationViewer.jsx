@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Box, layout } from "@chakra-ui/react";
 import { useClientContext } from "@yogeshp98/pocketbase-react";
-import { useNavigate, useParams } from "react-router-dom";
-import { motion, useAnimate } from "framer-motion";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { motion, useAnimate, usePresence } from "framer-motion";
 
 import componentMap from "../components/Kiosk/ComponentMap";
 
@@ -17,8 +17,10 @@ export default function ConfigurationViewer() {
   const [previousParams, setPreviousParams] = useState({});
   const pbClient = useClientContext();
   const [scope, animate] = useAnimate();
+  const [isPresent, safeToRemove] = usePresence();
   const [config, setConfig] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     pbClient.collection('kiosks').getOne(params.kioskId).then((kiosk) => {
@@ -73,6 +75,12 @@ export default function ConfigurationViewer() {
     }
   }, [params.pageIndex])
 
+  const navigateToPage = (index) => {
+    let path = location.pathname.split('/');
+    path.pop();
+    navigate(path.join('/') + '/' + index);
+  }
+
   return (
     <>
       {config ? (
@@ -104,10 +112,10 @@ export default function ConfigurationViewer() {
             {
               config.pages[params.pageIndex]?.layout?.map((component, index) => {
                 const [componentName] = component['i'].split('|');
-                const DyanmicComponent = componentMap[componentName][0];
+                const DynamicComponent = componentMap[componentName][0];
                 const props = config.pages[params.pageIndex].propValues[component['i']];
                 return <Box key={component['i']} h={'100%'} w={'100%'}>
-                  <DyanmicComponent {...component} pages={config.pages.map(v => v.name)} scaleFactor={1} {...props} />
+                  <DynamicComponent {...component} pages={config.pages.map(v => v.name)} scaleFactor={1} navigate={navigateToPage} {...props} />
                 </Box>
               })
 

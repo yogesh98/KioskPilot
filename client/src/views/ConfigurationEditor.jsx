@@ -298,10 +298,10 @@ export default function ConfigurationEditor() {
                                     {
                                         pages && pages[currentPage]?.layout?.map((component, index) => {
                                             const [componentName] = component['i'].split('|');
-                                            const DyanmicComponent = componentMap[componentName][0];
+                                            const DynamicComponent = componentMap[componentName][0];
                                             const props = pages[currentPage]?.propValues && pages[currentPage]?.propValues[component['i']] ? pages[currentPage]?.propValues[component['i']] : null;
                                             return <Box key={component['i']} outline={selectedComponent === index ? '2px solid #ffffff29' : ''} h={'100%'} w={'100%'}>
-                                                <DyanmicComponent {...component} pages={pages.map(v => v.name)} scaleFactor={scaleFactor} {...props} />
+                                                <DynamicComponent {...component} pages={pages.map(v => v.name)} scaleFactor={scaleFactor} navigate={setCurrentPage} {...props} />
                                             </Box>
                                         })
                                     }

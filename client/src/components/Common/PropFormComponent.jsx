@@ -7,7 +7,14 @@ export default function PropFormComponent({ config, pages, componentId, propMap,
 	const renderQuestion = (propMap, key) => {
 		return (<>
 			<FormLabel>{propMap[key]?.label}</FormLabel>
-			{propMap[key]?.inputType === 'input' ? <Input {...propMap[key]?.componentProps} value={propValues && propValues[key] ? propValues[key] : ''} onChange={(e) => onUpdatePropValues(key, e.target.value)} /> : null}
+			{propMap[key]?.inputType === 'input' ? 
+				<Input 
+					key={'input_' + key}
+					{...propMap[key]?.componentProps} 
+					value={propValues && propValues[key] ? propValues[key] : ''} 
+					onChange={(e) => onUpdatePropValues(key, e.target.value)} 
+				/> 
+			: null}
 			{propMap[key]?.inputType === 'select' ?
 				<Select
 					key={'select_' + key}
@@ -46,25 +53,33 @@ export default function PropFormComponent({ config, pages, componentId, propMap,
 
 	return (<>
 		{
-			Object.keys(propMap).map((key) => {
+			Object.keys(propMap).map((key, index) => {
 				return (<Box key={key + '|' + componentId}>
-					<Box key={'main_question_' + key + '|' + componentId} mb={4}>
+					<Box key={'main_question_' + key + '|' + componentId + '|' + index} mb={4}>
 						{renderQuestion(propMap, key, config)}
 					</Box>
 					{propMap &&
 						propMap[key] &&
 						propMap[key]['follow_up_questions'] &&
 						propValues && propValues[key] &&
-						(propMap[key]['follow_up_questions']?.onSelect || (!propMap[key]['follow_up_questions']?.onSelect && propMap[key]['follow_up_questions'][propValues[key]])) ?
-						<Box key={'follow_up_question_' + key + '|' + componentId} mb={4}>
-							{(!propMap[key]['follow_up_questions']?.onSelect) ?
+						propMap[key]['follow_up_questions'][propValues[key]] ?
+						<Box key={'follow_up_question_' + key + '|' + componentId + '|' + index} mb={4}>
+							{
 								Object.keys(propMap[key]['follow_up_questions'][propValues[key]]).map((follow_up_key) => renderQuestion(propMap[key]['follow_up_questions'][propValues[key]], follow_up_key))
-								:
-								Object.keys(propMap[key]['follow_up_questions'][0]).map((follow_up_key) => renderQuestion(propMap[key]['follow_up_questions'][0], follow_up_key))
 							}
 						</Box>
-						: null}
-
+					: null}
+					{propMap &&
+						propMap[key] &&
+						propMap[key]['follow_up_questions'] &&
+						propValues && propValues[key] &&
+						propMap[key]['follow_up_questions']['SPECIAL_always_show'] ?
+						<Box key={'follow_up_question_always_show_' + key + '|' + componentId + '|' + index} mb={4}>
+							{
+								Object.keys(propMap[key]['follow_up_questions']['SPECIAL_always_show']).map((follow_up_key) => renderQuestion(propMap[key]['follow_up_questions']['SPECIAL_always_show'], follow_up_key))
+							}
+						</Box>
+					: null}
 				</Box>);
 			})
 		}
