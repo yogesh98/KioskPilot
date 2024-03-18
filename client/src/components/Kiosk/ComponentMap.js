@@ -12,6 +12,5 @@ map =  {
     ...map,
     'Image': [ImageComponent, ImageComponentPropMap],
     'Button': [ButtonComponent, ButtonComponentPropMap],
-    'Button2': [ButtonComponent, ButtonComponentPropMap],
 };
 export default map;

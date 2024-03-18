@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Button, Flex, FormControl, FormLabel, Input, Select, VStack } from "@chakra-ui/react";
 
 
-export default function PropFormComponent({ config, componentId, propMap, propValues, onUpdatePropValues, currentPage }) {
+export default function PropFormComponent({ config, pages, componentId, propMap, propValues, onUpdatePropValues, currentPage }) {
 
 	const renderQuestion = (propMap, key) => {
 		return (<>
@@ -35,7 +35,7 @@ export default function PropFormComponent({ config, componentId, propMap, propVa
 					value={propValues && propValues[key] ? propValues[key] : ''}
 					onChange={(e) => onUpdatePropValues(key, e.target.value)}
 				>
-					{config?.pages?.map((val, index) => (val.name !== currentPage) ? (
+					{pages?.map((val, index) => (val.name !== currentPage) ? (
 						<option key={index + '_' + val.name} value={val.name} >
 							{val.name}
 						</option>) : null)}

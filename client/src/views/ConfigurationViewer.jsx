@@ -81,7 +81,7 @@ export default function ConfigurationViewer() {
             className="layout"
             width={config.width}
             height={config.height}
-            layout={config.pages[params.pageIndex]?.layout.map((layoutItem) => {
+            layout={config.pages[params.pageIndex]?.layout?.map((layoutItem) => {
               layoutItem.isDraggable = false;
               return layoutItem;
             })}

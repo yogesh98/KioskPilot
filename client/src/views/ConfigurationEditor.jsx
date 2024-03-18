@@ -342,6 +342,7 @@ export default function ConfigurationEditor() {
                         {pages?.length >= 0 && pages[currentPage]?.layout && selectedComponent >= 0 && pages[currentPage]?.layout[selectedComponent] ?
                             <PropFormComponent
                                 config={config}
+                                pages={pages}
                                 currentPage={pages[currentPage]?.name}
                                 componentId={pages[currentPage]?.layout[selectedComponent]?.['i']}
                                 propMap={componentMap[pages[currentPage]?.layout[selectedComponent]?.['i'].split('|')[0]][1]}
