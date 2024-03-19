@@ -19,7 +19,7 @@ export default function ConfigurationViewer() {
   const [externalBoxScope, externalBoxAnimate] = useAnimate();
   const [currentAnimation, setCurrentAnimation] = useState();
   const [config, setConfig] = useState(null);
-  const [hackyToggle, setHackyToggle] = useState(true);
+  const [refreshCount, setRefreshCount] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -38,10 +38,7 @@ export default function ConfigurationViewer() {
   useEffect(() => {
     if(currentAnimation?.animationType && currentAnimation?.animationName){
       playAnimation(currentAnimation.animationType, eval(currentAnimation.animationType)[currentAnimation['animationName']], 'enter').then(() => {
-        setHackyToggle(false);
-        setTimeout(() => {
-          setHackyToggle(true);
-        }, 1);
+        setRefreshCount(refreshCount+1);
         setCurrentAnimation(null)
       });
     }
@@ -77,7 +74,7 @@ export default function ConfigurationViewer() {
   }
   return (
     <>
-      { hackyToggle ? <Box id="animation-component" ref={externalBoxScope} bgColor={'black'} style={currentAnimation?.animationType ? eval(currentAnimation.animationType)[currentAnimation['animationName']]['initial'] : {}} {...currentAnimation?.boxProps}/> : null}
+      <Box key={refreshCount} id="animation-component" ref={externalBoxScope} bgColor={'black'} style={currentAnimation?.animationType ? eval(currentAnimation.animationType)[currentAnimation['animationName']]['initial'] : {}} {...currentAnimation?.boxProps}/>
       {config ? (
         <Box align="center" justify="center" h={config.height} w={config.width} overflow={'hidden'} /*outline={'5px dotted black'}*/>
           <Box ref={viewScope}>
