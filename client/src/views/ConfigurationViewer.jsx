@@ -5,7 +5,7 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useAnimate } from "framer-motion";
 
 import componentMap from "../components/Kiosk/componentMap";
-import { viewAnimations, externalBoxAnimations } from "../components/Kiosk/animationMap";
+import { viewAnimations, externalBoxAnimations } from "../components/Kiosk/animationMap"; // These are being used but its with the evals below so they aren't direclty being used.
 
 import RGL, { WidthProvider } from "react-grid-layout";
 import 'react-grid-layout/css/styles.css';
