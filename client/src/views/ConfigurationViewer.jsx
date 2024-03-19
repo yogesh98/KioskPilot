@@ -69,12 +69,11 @@ export default function ConfigurationViewer() {
       }
       return Promise.resolve(false);
   }
-
   return (
     <>
       {config ? (
         <Box align="center" justify="center" h={config.height} w={config.width} overflow={'hidden'} /*outline={'5px dotted black'}*/>
-          <div id="animation-component" ref={externalBoxScope} style={currentAnimation?.animationType ? eval(currentAnimation.animationType)[currentAnimation['animationName']]['initial'] : {}}/>
+          <Box id="animation-component" ref={externalBoxScope} bgColor={'black'} style={currentAnimation?.animationType ? eval(currentAnimation.animationType)[currentAnimation['animationName']]['initial'] : {}} {...currentAnimation?.boxProps}/>
           <Box ref={viewScope}>
             <ReactGridLayout
               className="layout"
@@ -106,9 +105,10 @@ export default function ConfigurationViewer() {
                   const [componentName] = component['i'].split('|');
                   const DynamicComponent = componentMap[componentName][0];
                   const props = config.pages[params.pageIndex].propValues[component['i']];
-                  const animation = props?.animationType && props?.animationName ? {'animationType': props?.animationType, 'animationName': props?.animationName} : null;
+                  const animationBoxAutoLoad_props = props ? Object.keys(props).reduce((obj, key) => {return key.includes('animationBoxAutoLoad_') ? {...obj, [key.replace('animationBoxAutoLoad_', '')]: props[key]} : obj}, {}) : {};
+                  const withAnimation = props?.animationType && props?.animationName ? {'animationType': props?.animationType, 'animationName': props?.animationName, 'boxProps': animationBoxAutoLoad_props} : null;
                   return <Box key={component['i']} h={'100%'} w={'100%'}>
-                    <DynamicComponent {...component} pages={config.pages.map(v => v.name)} scaleFactor={1} navigate={navigateToPage(animation)} {...props} />
+                    <DynamicComponent {...component} pages={config.pages.map(v => v.name)} scaleFactor={1} navigate={navigateToPage(withAnimation)} {...props} />
                   </Box>
                 })
 

@@ -37,7 +37,7 @@ export const viewAnimations = {
 
 export const externalBoxAnimations = {
     'swipeUp' : {
-        'initial': {position:'fixed', backgroundColor:'black', zIndex:'2', height:'100vh', width:'100vw', right:'0', bottom:'-100vh'},
+        'initial': {position:'fixed', zIndex:'2', height:'100vh', width:'100vw', right:'0', bottom:'-100vh'},
         'enter': {
             'to': {
                 'y': '0%',
@@ -52,7 +52,7 @@ export const externalBoxAnimations = {
         }
     },
     'swipeDown' : {
-        'initial': {position:'fixed', backgroundColor:'black', zIndex:'2', height:'100vh', width:'100vw', right:'0', top:'-100vh'},
+        'initial': {position:'fixed', zIndex:'2', height:'100vh', width:'100vw', right:'0', top:'-100vh'},
         'enter': {
             'to': {
                 'y': '0%',
@@ -67,7 +67,7 @@ export const externalBoxAnimations = {
         }
     },
     'swipeLeft' : {
-        'initial': {position:'fixed', backgroundColor:'black', zIndex:'2', height:'100vh', width:'100vw', right:'-100vw', top:'0'},
+        'initial': {position:'fixed', zIndex:'2', height:'100vh', width:'100vw', right:'-100vw', top:'0'},
         'enter': {
             'to': {
                 'x': '0%',
@@ -82,7 +82,7 @@ export const externalBoxAnimations = {
         }
     },
     'swipeRight' : {
-        'initial': {position:'fixed', backgroundColor:'black', zIndex:'2', height:'100vh', width:'100vw', left:'-100vw', top:'0'},
+        'initial': {position:'fixed', zIndex:'2', height:'100vh', width:'100vw', left:'-100vw', top:'0'},
         'enter': {
             'to': {
                 'x': '0%',
@@ -135,6 +135,10 @@ export const navigateToForm = {
                                     'placeholder': 'select an animation',
                                 },
                                 'options': (Object.keys(externalBoxAnimations)).reduce((obj, key) => {return {...obj, [key]:key}}, {})
+                            },
+                            'animationBoxAutoLoad_bgColor':{ //anything prefixed with animationBoxAutoLoad will automatically be loaded into animation box
+                                'label': 'Color',
+                                'inputType': 'colorPicker',
                             }
                         }
                     }
