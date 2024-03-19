@@ -37,61 +37,61 @@ export const viewAnimations = {
 
 export const externalBoxAnimations = {
     'swipeUp' : {
-        'initial': {position:'fixed', zIndex:'2', height:'100vh', width:'100vw', right:'0', bottom:'-100vh'},
+        'initial': {position:'fixed', zIndex:'2', height:'100vh', width:'100vw', top: '50vh', left: '0vw'},
         'enter': {
             'to': {
-                'y': '0%',
+                top: ['0vh', '-100vh'],
             },
             'options': { delay: 0.25, duration: 0.5, autoplay:true}
         },
         'exit': {
             'to': {
-                'y': '-100%',
+                top: ['100vh', '0vh'],
             },
             'options': { delay: 0.25, duration: 0.5, autoplay:true}
         }
     },
     'swipeDown' : {
-        'initial': {position:'fixed', zIndex:'2', height:'100vh', width:'100vw', right:'0', top:'-100vh'},
+        'initial': {position:'fixed', zIndex:'2', height:'100vh', width:'100vw', top: '-100vh', left: '0vw'},
         'enter': {
             'to': {
-                'y': '0%',
+                top: ['0vh', '100vh'],
             },
             'options': { delay: 0.25, duration: 0.5, autoplay:true}
         },
         'exit': {
             'to': {
-                'y': '100%',
+                top: ['-100vh', '0vh'],
             },
             'options': { delay: 0.25, duration: 0.5, autoplay:true}
         }
     },
     'swipeLeft' : {
-        'initial': {position:'fixed', zIndex:'2', height:'100vh', width:'100vw', right:'-100vw', top:'0'},
+        'initial': {position:'fixed', zIndex:'2', height:'100vh', width:'100vw', top: '0vh', left: '100vw'},
         'enter': {
             'to': {
-                'x': '0%',
+                left: ['0vw', '-100vw'],
             },
             'options': { delay: 0.25, duration: 0.5, autoplay:true}
         },
         'exit': {
             'to': {
-                'x': '-100%',
+                left: ['100vw', '0vw'],
             },
             'options': { duration: 0.5, autoplay:true}
         }
     },
     'swipeRight' : {
-        'initial': {position:'fixed', zIndex:'2', height:'100vh', width:'100vw', left:'-100vw', top:'0'},
+        'initial': {position:'fixed', zIndex:'2', height:'100vh', width:'100vw', top: '0vh', left: '-100vw'},
         'enter': {
             'to': {
-                'x': '0%',
+                left: ['0vw', '100vw'],
             },
             'options': { delay: 0.25, duration: 0.5, autoplay:true}
         },
         'exit': {
             'to': {
-                'x': '100%',
+                left: ['-100vw', '0vw'],
             },
             'options': { duration: 0.5, autoplay:true}
         }

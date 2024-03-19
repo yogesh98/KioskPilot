@@ -19,6 +19,7 @@ export default function ConfigurationViewer() {
   const [externalBoxScope, externalBoxAnimate] = useAnimate();
   const [currentAnimation, setCurrentAnimation] = useState();
   const [config, setConfig] = useState(null);
+  const [hackyToggle, setHackyToggle] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -36,8 +37,13 @@ export default function ConfigurationViewer() {
 
   useEffect(() => {
     if(currentAnimation?.animationType && currentAnimation?.animationName){
-      console.log(currentAnimation);
-      playAnimation(currentAnimation.animationType, eval(currentAnimation.animationType)[currentAnimation['animationName']], 'enter').then(() => setCurrentAnimation(null));
+      playAnimation(currentAnimation.animationType, eval(currentAnimation.animationType)[currentAnimation['animationName']], 'enter').then(() => {
+        setHackyToggle(false);
+        setTimeout(() => {
+          setHackyToggle(true);
+        }, 1);
+        setCurrentAnimation(null)
+      });
     }
   }, [params.pageIndex])
 
@@ -71,9 +77,9 @@ export default function ConfigurationViewer() {
   }
   return (
     <>
+      { hackyToggle ? <Box id="animation-component" ref={externalBoxScope} bgColor={'black'} style={currentAnimation?.animationType ? eval(currentAnimation.animationType)[currentAnimation['animationName']]['initial'] : {}} {...currentAnimation?.boxProps}/> : null}
       {config ? (
         <Box align="center" justify="center" h={config.height} w={config.width} overflow={'hidden'} /*outline={'5px dotted black'}*/>
-          <Box id="animation-component" ref={externalBoxScope} bgColor={'black'} style={currentAnimation?.animationType ? eval(currentAnimation.animationType)[currentAnimation['animationName']]['initial'] : {}} {...currentAnimation?.boxProps}/>
           <Box ref={viewScope}>
             <ReactGridLayout
               className="layout"
