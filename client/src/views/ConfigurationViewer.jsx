@@ -74,9 +74,9 @@ export default function ConfigurationViewer() {
   }
   return (
     <>
-      <Box key={refreshCount} id="animation-component" ref={externalBoxScope} bgColor={'black'} style={currentAnimation?.animationType ? eval(currentAnimation.animationType)[currentAnimation['animationName']]['initial'] : {}} {...currentAnimation?.boxProps}/>
+      <Box key={refreshCount} id="animation-component" ref={externalBoxScope} bgColor={'gray'} style={currentAnimation?.animationType ? eval(currentAnimation.animationType)[currentAnimation['animationName']]['initial'] : {}} {...currentAnimation?.boxProps}/>
       {config ? (
-        <Box align="center" justify="center" h={config.height} w={config.width} overflow={'hidden'} /*outline={'5px dotted black'}*/>
+        <Box align="center" justify="center" h={config.height} w={config.width} overflow={'hidden'} outline={'5px dotted black'} bgColor={'black'}>
           <Box ref={viewScope}>
             <ReactGridLayout
               className="layout"
