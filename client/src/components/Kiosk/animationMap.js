@@ -1,9 +1,3 @@
-const reduceFn = (obj, key) => {
-    obj[key] = key;
-    return obj;
-    // return {...obj, [key]:[key]}
-}
-
 export const viewAnimations = {
     'opacity': {
         'enter':{
