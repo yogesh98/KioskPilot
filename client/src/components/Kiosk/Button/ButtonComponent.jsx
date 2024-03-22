@@ -10,29 +10,67 @@ export const propMap = {
             'placeholder': 'Text for button',
         },
     },
+    'size': {
+        'label': 'Size',
+        'inputType': 'select',
+        'componentProps': {
+            'placeholder': 'select a size',
+        },
+        'options': {
+            'xs': 'x-small',
+            'sm': 'small',
+            'md': 'medium',
+            'lg': 'large',
+        },
+    },
+    'variant': {
+        'label': 'Variant',
+        'inputType': 'select',
+        'componentProps': {
+            'placeholder': 'select a variant',
+        },
+        'options': {
+            'solid': 'Solid',
+            'outline': 'Outlined',
+            'ghost': 'Ghost',
+            'link': 'Link',
+        },
+    },
+    'colorScheme': {
+        'label': 'Color Scheme',
+        'inputType': 'select',
+        'componentProps': {
+            'placeholder': 'select a color scheme',
+        },
+        'options': {
+            'gray':'Gray',
+            'red':'Red',
+            'orange':'Orange',
+            'yellow':'Yellow',
+            'green':'Green',
+            'teal':'Teal',
+            'blue':'Blue',
+            'cyan':'Cyan',
+            'purple':'Purple',
+            'pink':'Pink',
+            'linkedin':'Linkedin',
+            'facebook':'Facebook',
+            'messenger':'Messenger',
+            'whatsapp':'Whatsapp',
+            'twitter':'Twitter',
+            'telegram':'Telegram',
+        },
+    },
     'navigateTo': navigateToForm,
-    // 'h': {
-    //     'label': 'Height Percentage',
-    //     'inputType': 'input',
-    //     'componentProps': {
-    //         'type': 'number',
-    //         'placeholder': '',
-    //     },
-    // },
-    // 'w': {
-    //     'label': 'Width Percentage',
-    //     'inputType': 'input',
-    //     'componentProps': {
-    //         'type': 'number',
-    //         'placeholder': '',
-    //     },
-    // },
 };
 
 export default function ButtonComponent({ 
         scaleFactor, //Pass from editor or viewer
         navigate, //Pass from editor or viewer (Make sure to implement in both)
         text, // From prop form
+        size,
+        variant,
+        colorScheme,
         navigateTo // From prop form
     }) {
     const action = () => {
@@ -51,7 +89,7 @@ export default function ButtonComponent({
                         alignItems={'center'}
                     >
                         <div style={{ transform: 'scale(' + scaleFactor + ') translate(0%, 0%)' }}>
-                            <Button onClick={() => action()}>
+                            <Button onClick={() => action()} size={size} variant={variant} colorScheme={colorScheme} >
                                 {text}
                             </Button>
                         </div>
