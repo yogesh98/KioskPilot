@@ -31,14 +31,13 @@ export const propMap = {
 
 export default function ButtonComponent({ 
         scaleFactor, //Pass from editor or viewer
-        pages, //Pass from editor or viewer
         navigate, //Pass from editor or viewer (Make sure to implement in both)
         text, // From prop form
         navigateTo // From prop form
     }) {
     const action = () => {
         if (navigateTo) {
-            navigate(pages.indexOf(navigateTo));
+            navigate(navigateTo);
         }
     }
     return (

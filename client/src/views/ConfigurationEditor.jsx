@@ -302,7 +302,7 @@ export default function ConfigurationEditor() {
                                             const DynamicComponent = componentMap[componentName][0];
                                             const props = pages[currentPage]?.propValues && pages[currentPage]?.propValues[component['i']] ? pages[currentPage]?.propValues[component['i']] : null;
                                             return <Box key={component['i']} outline={selectedComponent === index ? '2px solid #ffffff29' : ''} h={'100%'} w={'100%'}>
-                                                <DynamicComponent {...component} pages={pages.map(v => v.name)} scaleFactor={scaleFactor} navigate={setCurrentPage} {...props} />
+                                                <DynamicComponent {...component} pages={pages.map(v => v.name)} scaleFactor={scaleFactor} navigate={() => {}} {...props} />
                                             </Box>
                                         })
                                     }

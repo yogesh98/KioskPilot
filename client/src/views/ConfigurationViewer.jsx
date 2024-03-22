@@ -44,7 +44,8 @@ export default function ConfigurationViewer() {
     }
   }, [params.pageIndex])
 
-  const navigateToPage = (withAnimation) => (index) => {
+  const navigateToPage = (withAnimation) => (pageName) => {
+    const index = config.pages.map(v => v.name).indexOf(pageName);
     let path = location.pathname.split('/');
     path.pop();
     if(withAnimation?.animationType && withAnimation?.animationName){

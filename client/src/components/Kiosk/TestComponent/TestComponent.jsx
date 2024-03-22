@@ -15,7 +15,7 @@ export const propMap = {
             'type': 'text',
             'placeholder': 'Text to show in component',
         },
-        'follow_up_questions': {
+        'followUpQuestions': {
             'showFollowUp': { // this key is the answer from the parent that causes this one to render.
                 'secondPropName': {
                     'label': 'human readable label for follow up',

@@ -98,7 +98,7 @@ export const navigateToForm = {
             'type': 'text',
             'placeholder': 'Select a page to go next',
         },
-        'follow_up_questions': {
+        'followUpQuestions': {
             'SPECIAL_always_show': {
                 'animationType': {
                     'label': 'Animation Type',
@@ -110,7 +110,7 @@ export const navigateToForm = {
                         'viewAnimations': 'View Animations',
                         'externalBoxAnimations': 'External Animations',
                     },
-                    'follow_up_questions':{
+                    'followUpQuestions':{
                         'viewAnimations': {
                             'animationName':{
                                 'label': 'Animation',

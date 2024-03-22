@@ -6,8 +6,6 @@ import {
 
 import './App.css'
 
-import ScaledLayout from './views/Test';
-
 const BaseLayout = React.lazy(() => import('./layouts/BaseLayout'));
 const RequireAuthLayout = React.lazy(() => import('./layouts/RequireAuthLayout'));
 const DashboardLayout = React.lazy(() => import('./layouts/DashboardLayout'));

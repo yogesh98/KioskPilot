@@ -68,23 +68,23 @@ export default function PropFormComponent({ config, pages, componentId, propMap,
 			{/*Below is recursive to render all follow up questions*/}
 			{propMap &&
 			propMap[key] &&
-			propMap[key]['follow_up_questions'] &&
+			propMap[key]['followUpQuestions'] &&
 			propValues && propValues[key] &&
-			propMap[key]['follow_up_questions'][propValues[key]] ?
+			propMap[key]['followUpQuestions'][propValues[key]] ?
 				<Box key={'follow_up_question_' + key + '|' + componentId} mb={4} ml={6}>
 					{
-						Object.keys(propMap[key]['follow_up_questions'][propValues[key]]).map((follow_up_key) => renderQuestion(propMap[key]['follow_up_questions'][propValues[key]], follow_up_key))
+						Object.keys(propMap[key]['followUpQuestions'][propValues[key]]).map((follow_up_key) => renderQuestion(propMap[key]['followUpQuestions'][propValues[key]], follow_up_key))
 					}
 				</Box>
 			: null}
 			{propMap &&
 			propMap[key] &&
-			propMap[key]['follow_up_questions'] &&
+			propMap[key]['followUpQuestions'] &&
 			propValues && propValues[key] &&
-			propMap[key]['follow_up_questions']['SPECIAL_always_show'] ?
+			propMap[key]['followUpQuestions']['SPECIAL_always_show'] ?
 				<Box key={'follow_up_question_always_show_' + key + '|' + componentId} mb={4} ml={6}>
 					{
-						Object.keys(propMap[key]['follow_up_questions']['SPECIAL_always_show']).map((follow_up_key) => renderQuestion(propMap[key]['follow_up_questions']['SPECIAL_always_show'], follow_up_key))
+						Object.keys(propMap[key]['followUpQuestions']['SPECIAL_always_show']).map((follow_up_key) => renderQuestion(propMap[key]['followUpQuestions']['SPECIAL_always_show'], follow_up_key))
 					}
 				</Box>
 			: null}
