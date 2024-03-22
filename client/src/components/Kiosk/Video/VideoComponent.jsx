@@ -36,6 +36,19 @@ export const propMap = {
         'followUpQuestions': {
             'true': {
                 'navigateTo': navigateToForm
+            },
+            'false': {
+                'loop': {
+                    'label': 'Loop?',
+                    'inputType': 'select',
+                    'componentProps': {
+                        'placeholder': 'select an option',
+                    },
+                    'options': {
+                        'true': 'yes',
+                        'false': 'no',
+                    }
+                }
             }
         }
     }
@@ -47,11 +60,13 @@ export default function VideoComponent({
     selectedVideo, //From Prop Form
     objectFit, //From Prop Form
     redirectOnComplete, //From Prop Form
+    loop, //From Prop From
     navigateTo, //From Prop Form
 }) {
     redirectOnComplete = JSON.parse(redirectOnComplete);
+    loop = !!loop ? JSON.parse(loop) : false
     const handleVideoEnd = () => {
-        if (redirectOnComplete && navigate && navigateTo) {
+        if (redirectOnComplete && navigate && navigateTo && !loop) {
             navigate(navigateTo);
         }
     };
@@ -68,6 +83,7 @@ export default function VideoComponent({
                     style={{objectFit: objectFit, height: '100%', width: '100%'}}
                     src={selectedVideo}
                     autoPlay
+                    loop={loop}
                     onEnded={handleVideoEnd}
                 >
                 </video>
