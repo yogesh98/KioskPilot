@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Box, Button, Flex, FormControl, FormLabel, Input, Select, VStack } from "@chakra-ui/react";
-import { HexColorPicker } from "react-colorful";
 import { DebouncedColorPickerComponent } from "./DebouncedColorPickerComponent";
 
 
@@ -10,14 +9,14 @@ export default function PropFormComponent({ config, pages, componentId, propMap,
 		return (<>
 			<FormLabel>{propMap[key]?.label}</FormLabel>
 			<Box mb={2}>
-				{propMap[key]?.inputType === 'input' ? 
-					<Input 
+				{propMap[key]?.inputType === 'input' ?
+					<Input
 						key={'input_' + key}
-						{...propMap[key]?.componentProps} 
-						value={propValues && propValues[key] ? propValues[key] : ''} 
-						onChange={(e) => onUpdatePropValues(key, e.target.value)} 
-					/> 
-				: null}
+						{...propMap[key]?.componentProps}
+						value={propValues && propValues[key] ? propValues[key] : ''}
+						onChange={(e) => onUpdatePropValues(key, e.target.value)}
+					/>
+					: null}
 				{propMap[key]?.inputType === 'select' ?
 					<Select
 						key={'select_' + key}
@@ -27,7 +26,7 @@ export default function PropFormComponent({ config, pages, componentId, propMap,
 					>
 						{Object.keys(propMap[key]?.options ?? {}).map((val) => <option key={val} value={val} >{propMap[key].options[val]}</option>)}
 					</Select>
-				: null}
+					: null}
 				{propMap[key]?.inputType === 'file' ?
 					<Select
 						key={'file_' + key}
@@ -37,7 +36,7 @@ export default function PropFormComponent({ config, pages, componentId, propMap,
 					>
 						{(config?.files ?? []).map((val) => <option key={val} value={import.meta.env.VITE_POCKET_BASE_SERVER_URL + 'api/files/' + config.collectionId + '/' + config.id + '/' + val} >{val}</option>)}
 					</Select>
-				: null}
+					: null}
 				{propMap[key]?.inputType === 'pageSelect' ?
 					<Select
 						key={'pageSelect_' + key}
@@ -50,44 +49,44 @@ export default function PropFormComponent({ config, pages, componentId, propMap,
 								{val.name}
 							</option>) : null)}
 					</Select>
-				: null}
+					: null}
 				{propMap[key]?.inputType === 'colorPicker' ?
 					<>
-						<Input 
+						<Input
 							key={'input_' + key}
-							{...propMap[key]?.componentProps} 
-							value={propValues && propValues[key] ? propValues[key] : ''} 
-							onChange={(e) => onUpdatePropValues(key, e.target.value)} 
-						/> 
-						<DebouncedColorPickerComponent color={propValues && propValues[key] ? propValues[key] : ''} onChange={(color) => onUpdatePropValues(key, color)}/>
+							{...propMap[key]?.componentProps}
+							value={propValues && propValues[key] ? propValues[key] : ''}
+							onChange={(e) => onUpdatePropValues(key, e.target.value)}
+						/>
+						<DebouncedColorPickerComponent color={propValues && propValues[key] ? propValues[key] : ''} onChange={(color) => onUpdatePropValues(key, color)} />
 						{/* <HexColorPicker color={propValues && propValues[key] ? propValues[key] : ''} onChange={(color) => onUpdatePropValues(key, color)} /> */}
 					</>
-				: null}
+					: null}
 			</Box>
 
 			{/*Below is recursive to render all follow up questions*/}
 			{propMap &&
-			propMap[key] &&
-			propMap[key]['followUpQuestions'] &&
-			propValues && propValues[key] &&
-			propMap[key]['followUpQuestions'][propValues[key]] ?
+				propMap[key] &&
+				propMap[key]['followUpQuestions'] &&
+				propValues && propValues[key] &&
+				propMap[key]['followUpQuestions'][propValues[key]] ?
 				<Box key={'follow_up_question_' + key + '|' + componentId} mb={4} ml={6}>
 					{
 						Object.keys(propMap[key]['followUpQuestions'][propValues[key]]).map((follow_up_key) => renderQuestion(propMap[key]['followUpQuestions'][propValues[key]], follow_up_key))
 					}
 				</Box>
-			: null}
+				: null}
 			{propMap &&
-			propMap[key] &&
-			propMap[key]['followUpQuestions'] &&
-			propValues && propValues[key] &&
-			propMap[key]['followUpQuestions']['SPECIAL_always_show'] ?
+				propMap[key] &&
+				propMap[key]['followUpQuestions'] &&
+				propValues && propValues[key] &&
+				propMap[key]['followUpQuestions']['SPECIAL_always_show'] ?
 				<Box key={'follow_up_question_always_show_' + key + '|' + componentId} mb={4} ml={6}>
 					{
 						Object.keys(propMap[key]['followUpQuestions']['SPECIAL_always_show']).map((follow_up_key) => renderQuestion(propMap[key]['followUpQuestions']['SPECIAL_always_show'], follow_up_key))
 					}
 				</Box>
-			: null}
+				: null}
 		</>);
 	}
 

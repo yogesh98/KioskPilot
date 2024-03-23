@@ -4,7 +4,7 @@ import { useClientContext } from "@yogeshp98/pocketbase-react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useAnimate } from "framer-motion";
 
-import componentMap from "../components/Kiosk/ComponentMap";
+import componentMap from "../components/Kiosk/componentMap";
 import { viewAnimations, externalBoxAnimations } from "../components/Kiosk/animationMap"; // These are being used but its with the evals below so they aren't direclty being used.
 
 import RGL, { WidthProvider } from "react-grid-layout";
@@ -36,9 +36,9 @@ export default function ConfigurationViewer() {
   }, [pbClient, params.kioskId]);
 
   useEffect(() => {
-    if(currentAnimation?.animationType && currentAnimation?.animationName){
+    if (currentAnimation?.animationType && currentAnimation?.animationName) {
       playAnimation(currentAnimation.animationType, eval(currentAnimation.animationType)[currentAnimation['animationName']], 'enter').then(() => {
-        setRefreshCount(refreshCount+1);
+        setRefreshCount(refreshCount + 1);
         setCurrentAnimation(null)
       });
     }
@@ -97,10 +97,10 @@ export default function ConfigurationViewer() {
   }
   return (
     <>
-      <Box key={refreshCount} id="animation-component" ref={externalBoxScope} bgColor={'gray'} style={currentAnimation?.animationType ? eval(currentAnimation.animationType)[currentAnimation['animationName']]['initial'] : {}} {...currentAnimation?.boxProps}/>
+      <Box key={refreshCount} id="animation-component" ref={externalBoxScope} bgColor={'gray'} style={currentAnimation?.initial ? currentAnimation.initial : (currentAnimation?.animationType ? eval(currentAnimation.animationType)[currentAnimation['animationName']]['initial'] : {})} {...currentAnimation?.boxProps} />
       {config ? (
         <Box align="center" justify="center" h={config.height} w={config.width} overflow={'hidden'} outline={'5px dotted black'} bgColor={'black'}>
-          <Box ref={viewScope}>
+          <Box ref={viewScope} align="center" justify="center" h={config.height} w={config.width}>
             <ReactGridLayout
               className="layout"
               width={config.width}
@@ -131,8 +131,8 @@ export default function ConfigurationViewer() {
                   const [componentName] = component['i'].split('|');
                   const DynamicComponent = componentMap[componentName][0];
                   const props = config.pages[params.pageIndex].propValues[component['i']];
-                  const animationBoxAutoLoad_props = props ? Object.keys(props).reduce((obj, key) => {return key.includes('animationBoxAutoLoad_') ? {...obj, [key.replace('animationBoxAutoLoad_', '')]: props[key]} : obj}, {}) : {};
-                  const withAnimation = props?.animationType && props?.animationName ? {'animationType': props?.animationType, 'animationName': props?.animationName, 'boxProps': animationBoxAutoLoad_props} : null;
+                  const animationBoxAutoLoad_props = props ? Object.keys(props).reduce((obj, key) => { return key.includes('animationBoxAutoLoad_') ? { ...obj, [key.replace('animationBoxAutoLoad_', '')]: props[key] } : obj }, {}) : {};
+                  const withAnimation = props?.animationType && props?.animationName ? { 'animationType': props?.animationType, 'animationName': props?.animationName, 'boxProps': animationBoxAutoLoad_props } : null;
                   return <Box key={component['i']} h={'100%'} w={'100%'}>
                     <DynamicComponent {...component} pages={config.pages.map(v => v.name)} scaleFactor={1} navigate={navigateToPage(withAnimation)} {...props} />
                   </Box>

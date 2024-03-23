@@ -5,7 +5,7 @@ import { BsFloppy } from "react-icons/bs";
 import { useAppContent, useClientContext } from "@yogeshp98/pocketbase-react";
 import { useParams } from "react-router-dom";
 
-import componentMap from "../components/Kiosk/ComponentMap";
+import componentMap from "../components/Kiosk/componentMap";
 
 import RGL, { WidthProvider } from "react-grid-layout";
 import 'react-grid-layout/css/styles.css';
@@ -302,7 +302,7 @@ export default function ConfigurationEditor() {
                                             const DynamicComponent = componentMap[componentName][0];
                                             const props = pages[currentPage]?.propValues && pages[currentPage]?.propValues[component['i']] ? pages[currentPage]?.propValues[component['i']] : null;
                                             return <Box key={component['i']} outline={selectedComponent === index ? '2px solid #ffffff29' : ''} h={'100%'} w={'100%'}>
-                                                <DynamicComponent {...component} pages={pages.map(v => v.name)} scaleFactor={scaleFactor} navigate={() => {}} {...props} />
+                                                <DynamicComponent {...component} pages={pages.map(v => v.name)} scaleFactor={scaleFactor} navigate={() => { }} {...props} />
                                             </Box>
                                         })
                                     }

@@ -73,7 +73,7 @@ export default function ButtonComponent({
     colorScheme,
     navigateTo // From prop form
 }) {
-    const action = () => {
+    const action = (e) => {
         if (navigateTo) {
             navigate(navigateTo, e);
         }
