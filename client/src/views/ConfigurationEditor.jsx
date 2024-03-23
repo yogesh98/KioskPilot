@@ -5,7 +5,7 @@ import { BsFloppy } from "react-icons/bs";
 import { useAppContent, useClientContext } from "@yogeshp98/pocketbase-react";
 import { useParams } from "react-router-dom";
 
-import componentMap from "../components/Kiosk/componentMap";
+import componentMap from "../components/Kiosk/ComponentMap";
 
 import RGL, { WidthProvider } from "react-grid-layout";
 import 'react-grid-layout/css/styles.css';

@@ -26,6 +26,38 @@ export const viewAnimations = {
             },
             'options': { duration: 0.5, autoplay: true }
         }
+    },
+    'forward' : {
+        'enter': {
+            'to': {
+                'scale': [0.5, 1],
+                'opacity': [0, 1],
+            },
+            'options': { duration: 0.5, autoplay:true}
+        },
+        'exit': {
+            'to': {
+                'scale': [1, 1.5],
+                'opacity': [1, 0],
+            },
+            'options': { duration: 0.5, autoplay:true}
+        }
+    },
+    'backward' : {
+        'enter': {
+            'to': {
+                'scale': [1.5, 1],
+                'opacity': [0, 1],
+            },
+            'options': { duration: 0.5, autoplay:true}
+        },
+        'exit': {
+            'to': {
+                'scale': [1, 0.5],
+                'opacity': [1, 0],
+            },
+            'options': { duration: 0.5, autoplay:true}
+        }
     }
 };
 
@@ -90,6 +122,22 @@ export const externalBoxAnimations = {
             'options': { duration: 0.5, autoplay:true}
         }
     },
+    'ripple': {
+        'dynamic': ['top', 'left'],
+        'initial': {position:'fixed', backgroundColor:'#2D3748', zIndex:'2', height:'1px', width:'1px', left:'0', top:'0', borderRadius: '50%'},
+        'enter': {
+            'to': {
+                'scale': [5000, 0],
+            },
+            'options': { delay: 0.25, duration: 0.5, autoplay:true}
+        },
+        'exit': {
+            'to': {
+                'scale': [0, 5000],
+            },
+            'options': { duration: 1, autoplay:true, ease: [0, 0.71, 0.2, 1.01]}
+        }
+    }
 }
 export const navigateToForm = {
         'label': 'Navigate to Page',

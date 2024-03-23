@@ -43,39 +43,39 @@ export const propMap = {
             'placeholder': 'select a color scheme',
         },
         'options': {
-            'gray':'Gray',
-            'red':'Red',
-            'orange':'Orange',
-            'yellow':'Yellow',
-            'green':'Green',
-            'teal':'Teal',
-            'blue':'Blue',
-            'cyan':'Cyan',
-            'purple':'Purple',
-            'pink':'Pink',
-            'linkedin':'Linkedin',
-            'facebook':'Facebook',
-            'messenger':'Messenger',
-            'whatsapp':'Whatsapp',
-            'twitter':'Twitter',
-            'telegram':'Telegram',
+            'gray': 'Gray',
+            'red': 'Red',
+            'orange': 'Orange',
+            'yellow': 'Yellow',
+            'green': 'Green',
+            'teal': 'Teal',
+            'blue': 'Blue',
+            'cyan': 'Cyan',
+            'purple': 'Purple',
+            'pink': 'Pink',
+            'linkedin': 'Linkedin',
+            'facebook': 'Facebook',
+            'messenger': 'Messenger',
+            'whatsapp': 'Whatsapp',
+            'twitter': 'Twitter',
+            'telegram': 'Telegram',
         },
     },
     'navigateTo': navigateToForm,
 };
 
-export default function ButtonComponent({ 
-        scaleFactor, //Pass from editor or viewer
-        navigate, //Pass from editor or viewer (Make sure to implement in both)
-        text, // From prop form
-        size,
-        variant,
-        colorScheme,
-        navigateTo // From prop form
-    }) {
+export default function ButtonComponent({
+    scaleFactor, //Pass from editor or viewer
+    navigate, //Pass from editor or viewer (Make sure to implement in both)
+    text, // From prop form
+    size,
+    variant,
+    colorScheme,
+    navigateTo // From prop form
+}) {
     const action = () => {
         if (navigateTo) {
-            navigate(navigateTo);
+            navigate(navigateTo, e);
         }
     }
     return (
@@ -89,7 +89,7 @@ export default function ButtonComponent({
                         alignItems={'center'}
                     >
                         <div style={{ transform: 'scale(' + scaleFactor + ') translate(0%, 0%)' }}>
-                            <Button onClick={() => action()} size={size} variant={variant} colorScheme={colorScheme} >
+                            <Button onClick={action} size={size} variant={variant} colorScheme={colorScheme} >
                                 {text}
                             </Button>
                         </div>

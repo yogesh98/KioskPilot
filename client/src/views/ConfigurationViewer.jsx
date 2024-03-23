@@ -4,7 +4,7 @@ import { useClientContext } from "@yogeshp98/pocketbase-react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useAnimate } from "framer-motion";
 
-import componentMap from "../components/Kiosk/componentMap";
+import componentMap from "../components/Kiosk/ComponentMap";
 import { viewAnimations, externalBoxAnimations } from "../components/Kiosk/animationMap"; // These are being used but its with the evals below so they aren't direclty being used.
 
 import RGL, { WidthProvider } from "react-grid-layout";
@@ -44,11 +44,15 @@ export default function ConfigurationViewer() {
     }
   }, [params.pageIndex])
 
-  const navigateToPage = (withAnimation) => (pageName) => {
+  const navigateToPage = (withAnimation) => (pageName, event) => {
     const index = config.pages.map(v => v.name).indexOf(pageName);
     let path = location.pathname.split('/');
     path.pop();
-    if(withAnimation?.animationType && withAnimation?.animationName){
+    if (withAnimation?.animationType && withAnimation?.animationName) {
+      if (withAnimation.animationType === 'externalBoxAnimations' && eval(withAnimation?.animationType)?.[withAnimation['animationName']]?.['dynamic']) {
+        const map = eval(withAnimation.animationType)[withAnimation['animationName']]
+        withAnimation.initial = configureDynamicAnimation(map['dynamic'], map['initial'], event);
+      }
       setCurrentAnimation(withAnimation);
       playAnimation(withAnimation.animationType, eval(withAnimation.animationType)[withAnimation['animationName']], 'exit').then(() => navigate(path.join('/') + '/' + index));
     } else {
@@ -56,22 +60,40 @@ export default function ConfigurationViewer() {
     }
   }
 
+  const configureDynamicAnimation = (dynamic, initial, event) => {
+
+    dynamic.forEach(property => {
+      switch (property) {
+        case 'top':
+        case 'bottom':
+          initial[property] = event.clientY;
+          break;
+        case 'left':
+        case 'right':
+          initial[property] = event.clientX;
+          break;
+      }
+    });
+
+    return initial
+  }
 
   const playAnimation = (animationType, animation, enterOrExit) => {
-      let scope = null;
-      let animate = null;
-      if(animationType === 'viewAnimations'){
-        scope = viewScope;
-        animate = viewAnimate;
-      } else if (animationType === 'externalBoxAnimations'){
-        scope = externalBoxScope;
-        animate = externalBoxAnimate;
-      }
-      
-      if(scope) {
-        return animate(scope.current, animation[enterOrExit]['to'], animation[enterOrExit]['options']);
-      }
-      return Promise.resolve(false);
+    let scope = null;
+    let animate = null;
+
+    if (animationType === 'viewAnimations') {
+      scope = viewScope;
+      animate = viewAnimate;
+    } else if (animationType === 'externalBoxAnimations') {
+      scope = externalBoxScope;
+      animate = externalBoxAnimate;
+    }
+
+    if (scope) {
+      return animate(scope.current, animation[enterOrExit]['to'], animation[enterOrExit]['options']);
+    }
+    return Promise.resolve(false);
   }
   return (
     <>
