@@ -61,21 +61,21 @@ export default function ConfigurationViewer() {
   }
 
   const configureDynamicAnimation = (dynamic, initial, event) => {
-
+    let newInitial = {...initial};
     dynamic.forEach(property => {
       switch (property) {
         case 'top':
         case 'bottom':
-          initial[property] = event.clientY;
+          newInitial[property] = event.clientY;
           break;
         case 'left':
         case 'right':
-          initial[property] = event.clientX;
+          newInitial[property] = event.clientX;
           break;
       }
     });
 
-    return initial
+    return newInitial
   }
 
   const playAnimation = (animationType, animation, enterOrExit) => {
