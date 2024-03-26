@@ -13,6 +13,8 @@ import 'react-resizable/css/styles.css';
 import PropFormComponent from "../components/Common/PropFormComponent";
 import FileUploadComponent from "../components/Common/FileUploadComponent";
 const ReactGridLayout = WidthProvider(RGL);
+import { uuid } from 'uuidv4';
+
 
 export default function ConfigurationEditor() {
     const widget_common_styles = {
@@ -110,7 +112,7 @@ export default function ConfigurationEditor() {
 
     const onDrop = (layout, layoutItem) => {
         let newLayout = pages[currentPage].layout ? [...pages[currentPage].layout] : [];
-        const uuid = crypto.randomUUID();
+        const uuid = uuid();
         layoutItem['i'] = draggingFromOutside + '|' + uuid;
         layoutItem['w'] = Math.floor(config.columns > 10 ? config.columns / 10 : 1);
         layoutItem['h'] = Math.floor(config.rows > 10 ? config.rows / 10 : 1);
