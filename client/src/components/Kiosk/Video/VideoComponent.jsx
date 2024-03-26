@@ -63,7 +63,7 @@ export default function VideoComponent({
     loop, //From Prop From
     navigateTo, //From Prop Form
 }) {
-    redirectOnComplete = JSON.parse(redirectOnComplete);
+    redirectOnComplete = !!redirectOnComplete ? JSON.parse(redirectOnComplete) : false;
     loop = !!loop ? JSON.parse(loop) : false
     const handleVideoEnd = () => {
         if (redirectOnComplete && navigate && navigateTo && !loop) {
