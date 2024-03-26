@@ -28,7 +28,7 @@
     "react-router-dom": "^6.21.2",
     "sort-by": "^1.2.0",
     "use-debouncy": "^5.0.1",
-    "uuidv4": "^6.2.13"
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
