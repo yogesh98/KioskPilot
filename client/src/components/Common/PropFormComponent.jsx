@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Button, Flex, FormControl, FormLabel, Input, Select, VStack } from "@chakra-ui/react";
+import { Box, Button, Flex, FormControl, FormLabel, Input, Select, Slider, SliderTrack, SliderFilledTrack, SliderThumb, VStack } from "@chakra-ui/react";
 import { DebouncedColorPickerComponent } from "./DebouncedColorPickerComponent";
 
 
@@ -62,6 +62,19 @@ export default function PropFormComponent({ config, pages, componentId, propMap,
 						{/* <HexColorPicker color={propValues && propValues[key] ? propValues[key] : ''} onChange={(color) => onUpdatePropValues(key, color)} /> */}
 					</>
 					: null}
+                {propMap[key]?.inputType === 'slider' ?
+                    <Slider
+                        key={'slider_' + key}
+                        {...propMap[key]?.componentProps}
+                        value={propValues && propValues[key] ? propValues[key] : 0}
+                        onChange={(value) => onUpdatePropValues(key, value)}
+                    >
+                        <SliderTrack>
+                            <SliderFilledTrack />
+                        </SliderTrack>
+                        <SliderThumb />
+                    </Slider>
+                    : null}
 			</Box>
 
 			{/*Below is recursive to render all follow up questions*/}

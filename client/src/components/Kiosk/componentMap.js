@@ -2,6 +2,8 @@ import TestComponent, {propMap as testComponentPropMap} from './TestComponent/Te
 import ImageComponent, {propMap as ImageComponentPropMap} from './Image/ImageComponent';
 import ButtonComponent, {propMap as ButtonComponentPropMap} from './Button/ButtonComponent';
 import VideoComponent, {propMap as VideoComponentPropMap}  from './Video/VideoComponent';
+import TextComponent, {propMap as TextComponentPropMap}  from './Text/TextComponent';
+
 
 let map = {};
 
@@ -13,5 +15,7 @@ map =  {
     'Image': [ImageComponent, ImageComponentPropMap],
     'Button': [ButtonComponent, ButtonComponentPropMap],
     'Video': [VideoComponent, VideoComponentPropMap],
+    'Text': [TextComponent, TextComponentPropMap],
 };
 export default map;
+

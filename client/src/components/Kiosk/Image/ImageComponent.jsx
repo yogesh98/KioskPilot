@@ -46,9 +46,20 @@ export const propMap = {
             'repeat-y': 'Repeat Y',
         }
     },
+    "opacity": {
+        'label': 'Opacity',
+        'inputType': 'slider',
+        'componentProps': {
+            'min': 0,
+            'max': 1,
+            'step': 0.01,
+            'defaultValue': 1,
+        },
+    },
+    
 };
 
-export default function ImageComponent({ scaleFactor, selectedImage, bgSize, bgPosition, bgRepeat }) {
+export default function ImageComponent({ scaleFactor, selectedImage, bgSize, bgPosition, bgRepeat, opacity, filter }) {
     const scaleFactorAsPercentage = (scaleFactor > 1 ? 1 : -1) * (scaleFactor * 100);
     return (
         <>
@@ -60,6 +71,8 @@ export default function ImageComponent({ scaleFactor, selectedImage, bgSize, bgP
                         h={'100%'}
                         bgPosition={bgPosition ? bgPosition : 'center'}
                         bgRepeat={bgRepeat ? bgRepeat : 'repeat'}
+                        opacity={opacity ? opacity : 1}
+                        filter={filter ? filter : 'none'}
                     >
 
                     </Box>
