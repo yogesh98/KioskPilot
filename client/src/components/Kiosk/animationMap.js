@@ -168,7 +168,7 @@ export const navigateToForm = {
                                 'componentProps': {
                                     'placeholder': 'select an animation',
                                 },
-                                'options': (Object.keys(viewAnimations)).reduce((obj, key) => {return {...obj, [key]:key}}, {})
+                                'options': (Object.keys(animations['viewAnimations'])).reduce((obj, key) => {return {...obj, [key]:key}}, {})
                             }
                         },
                         'externalBoxAnimations': {
@@ -178,7 +178,7 @@ export const navigateToForm = {
                                 'componentProps': {
                                     'placeholder': 'select an animation',
                                 },
-                                'options': (Object.keys(externalBoxAnimations)).reduce((obj, key) => {return {...obj, [key]:key}}, {})
+                                'options': (Object.keys(animations['externalBoxAnimations'])).reduce((obj, key) => {return {...obj, [key]:key}}, {})
                             },
                             'animationBoxAutoLoad_bgColor':{ //anything prefixed with animationBoxAutoLoad will automatically be loaded into animation box
                                 'label': 'Color',
