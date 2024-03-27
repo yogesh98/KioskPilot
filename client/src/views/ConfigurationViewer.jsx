@@ -5,7 +5,7 @@ import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useAnimate } from "framer-motion";
 
 import componentMap from "../components/Kiosk/componentMap";
-import { viewAnimations, externalBoxAnimations } from "../components/Kiosk/animationMap"; // These are being used but its with the evals below so they aren't direclty being used.
+import { animations } from "../components/Kiosk/animationMap"; // These are being used but its with the evals below so they aren't direclty being used.
 
 import RGL, { WidthProvider } from "react-grid-layout";
 import 'react-grid-layout/css/styles.css';
@@ -37,7 +37,8 @@ export default function ConfigurationViewer() {
 
   useEffect(() => {
     if (currentAnimation?.animationType && currentAnimation?.animationName) {
-      playAnimation(currentAnimation.animationType, eval(currentAnimation.animationType)[currentAnimation['animationName']], 'enter').then(() => {
+
+      playAnimation(currentAnimation.animationType, animations[currentAnimation.animationType][currentAnimation['animationName']], 'enter').then(() => {
         setRefreshCount(refreshCount + 1);
         setCurrentAnimation(null)
       });
@@ -49,12 +50,12 @@ export default function ConfigurationViewer() {
     let path = location.pathname.split('/');
     path.pop();
     if (withAnimation?.animationType && withAnimation?.animationName) {
-      if (withAnimation.animationType === 'externalBoxAnimations' && eval(withAnimation?.animationType)?.[withAnimation['animationName']]?.['dynamic']) {
-        const map = eval(withAnimation.animationType)[withAnimation['animationName']]
+      if (withAnimation.animationType === 'externalBoxAnimations' && animations[withAnimation?.animationType]?.[withAnimation['animationName']]?.['dynamic']) {
+        const map = animations[withAnimation.animationType][withAnimation['animationName']]
         withAnimation.initial = configureDynamicAnimation(map['dynamic'], map['initial'], event);
       }
       setCurrentAnimation(withAnimation);
-      playAnimation(withAnimation.animationType, eval(withAnimation.animationType)[withAnimation['animationName']], 'exit').then(() => navigate(path.join('/') + '/' + index));
+      playAnimation(withAnimation.animationType, animations[withAnimation.animationType][withAnimation['animationName']], 'exit').then(() => navigate(path.join('/') + '/' + index));
     } else {
       navigate(path.join('/') + '/' + index);
     }
@@ -97,7 +98,7 @@ export default function ConfigurationViewer() {
   }
   return (
     <>
-      <Box key={refreshCount} id="animation-component" ref={externalBoxScope} bgColor={'gray'} style={currentAnimation?.initial ? currentAnimation.initial : (currentAnimation?.animationType ? eval(currentAnimation.animationType)[currentAnimation['animationName']]['initial'] : {})} {...currentAnimation?.boxProps} />
+      <Box key={refreshCount} id="animation-component" ref={externalBoxScope} bgColor={'gray'} style={currentAnimation?.initial ? currentAnimation.initial : (currentAnimation?.animationType ? animations[currentAnimation.animationType][currentAnimation['animationName']]['initial'] : {})} {...currentAnimation?.boxProps} />
       {config ? (
         <Box align="center" justify="center" h={config.height} w={config.width} overflow={'hidden'} outline={'5px dotted black'} bgColor={'black'}>
           <Box ref={viewScope} align="center" justify="center" h={config.height} w={config.width}>
