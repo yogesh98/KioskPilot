@@ -1,5 +1,6 @@
 import { Box, Flex } from "@chakra-ui/react";
 import { navigateToForm } from "../animationMap";
+import { useEffect } from "react";
 
 export const propMap = {
     'selectedVideo': {
@@ -84,6 +85,9 @@ export default function VideoComponent({
                     src={selectedVideo}
                     autoPlay
                     loop={loop}
+                    playsInline={true}
+                    webkit-playsInline={true}
+                    muted={true}
                     onEnded={handleVideoEnd}
                 >
                 </video>
