@@ -36,6 +36,14 @@ export default function ConfigurationViewer() {
   }, [pbClient, params.kioskId]);
 
   useEffect(() => {
+    if (config) {
+      if (!config.pages[params.pageIndex]) {
+        navigate(`/kiosk/${params.kioskId}/0`);
+      }
+    }
+  }, [config, params.pageIndex]);
+
+  useEffect(() => {
     if (currentAnimation?.animationType && currentAnimation?.animationName) {
 
       playAnimation(currentAnimation.animationType, animations[currentAnimation.animationType][currentAnimation['animationName']], 'enter').then(() => {
@@ -67,11 +75,11 @@ export default function ConfigurationViewer() {
       switch (property) {
         case 'top':
         case 'bottom':
-          newInitial[property] = event.clientY;
+          newInitial[property] = event?.clientY || 0;
           break;
         case 'left':
         case 'right':
-          newInitial[property] = event.clientX;
+          newInitial[property] = event?.clientX || 0;
           break;
       }
     });
