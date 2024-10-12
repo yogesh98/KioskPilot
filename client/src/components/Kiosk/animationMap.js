@@ -125,7 +125,7 @@ export const animations = {
         },
         'ripple': {
             'dynamic': ['top', 'left'],
-            'initial': {position:'fixed', backgroundColor:'#2D3748', zIndex:'2', height:'1px', width:'1px', left:'0', top:'0', borderRadius: '50%'},
+            'initial': {position:'fixed', zIndex:'2', height:'1px', width:'1px', left:'0', top:'0', borderRadius: '50%'},
             'enter': {
                 'to': {
                     'scale': [5000, 0],

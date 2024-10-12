@@ -63,6 +63,20 @@ export default function ConfigurationEditor() {
     })
 
     useEffect(() => {
+        pbClient.collection('configurations').getOne('_preview_config').catch(async () => {
+            console.log("Creating preview config");
+            await pbClient.collection('configurations').create({ id: '_preview_config' });
+        }).finally(() => {
+            if (timeout) clearTimeout(timeout);
+            timeout = setTimeout(() => setPreviewLoading(false), 250);
+        });
+
+        pbClient.collection('kiosks').getOne('_preview_kiosk_').catch(async () => {
+            await pbClient.collection('kiosks').create({id: '_preview_kiosk_', name:'preview', configuration:'_preview_config'});
+        });
+    }, []);
+
+    useEffect(() => {
         setLoading(true);
         refreshConfig();
     }, [pbClient, params.configurationId]);
@@ -79,7 +93,7 @@ export default function ConfigurationEditor() {
             pbClient.collection('configurations').update('_preview_config', previewConfig).then(() => {
                 if (timeout) clearTimeout(timeout);
                 timeout = setTimeout(() => setPreviewLoading(false), 250);
-            })
+            });
         }
     }, [config, pages]);
 
@@ -368,7 +382,9 @@ export default function ConfigurationEditor() {
                             <IconButton mr={2} colorScheme={'blue'} variant={'outline'} icon={<BsFloppy />} onClick={savePages} />
                         </Tooltip>
                         <Select id="kiosk_select" flexGrow={1}>
-                            {kiosks?.map((k) => <option key={k.id} value={k.id} >{k.name} kiosk</option>)}
+                            {kiosks?.map((k) => {
+                                return k.id === '_preview_kiosk_' ? null : <option key={k.id} value={k.id} >{k.name} kiosk</option>
+                            })}
                         </Select>
                         <Tooltip label='Push to Kiosk'>
                             <IconButton ml={2} colorScheme={'blue'} icon={<ArrowRightIcon />} onClick={pushToKiosk} />
