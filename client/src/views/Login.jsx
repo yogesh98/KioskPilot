@@ -37,6 +37,7 @@ export default function Login() {
       }
     })
     const handleSubmit = async (e) => {
+      console.log("trying to login", import.meta.env.VITE_POCKET_BASE_SERVER_URL);
       e.preventDefault()
       try {
         await actions.signInWithEmail(emailRef?.current?.value, passwordRef?.current?.value)
