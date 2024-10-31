@@ -24,21 +24,21 @@ export const propMap = {
             'scale-down': 'scale down',
         }
     },
-    "redirectOnComplete": {
-        'label': 'Redirect on Complete?',
+    "redirectOnCompleteOrOnClick": {
+        'label': 'Redirect on Complete Or On Click?',
         'inputType': 'select',
         'componentProps': {
             'placeholder': 'select an option',
         },
         'options': {
-            'true': 'yes',
-            'false': 'no',
+            'onClick': 'On Click',
+            'onComplete': 'On Complete',
         },
         'followUpQuestions': {
-            'true': {
+            'onComplete': {
                 'navigateTo': navigateToForm
             },
-            'false': {
+            'onClick': {
                 'loop': {
                     'label': 'Loop?',
                     'inputType': 'select',
@@ -49,10 +49,11 @@ export const propMap = {
                         'true': 'yes',
                         'false': 'no',
                     }
-                }
-            }
+                },
+                'navigateTo': navigateToForm,
+            },
         }
-    }
+    },
 };
 
 export default function VideoComponent({ 
@@ -60,17 +61,22 @@ export default function VideoComponent({
     navigate, //Passed from editor or viewer
     selectedVideo, //From Prop Form
     objectFit, //From Prop Form
-    redirectOnComplete, //From Prop Form
+    redirectOnCompleteOrOnClick, //From Prop Form
     loop, //From Prop From
     navigateTo, //From Prop Form
 }) {
-    redirectOnComplete = !!redirectOnComplete ? JSON.parse(redirectOnComplete) : false;
     loop = !!loop ? JSON.parse(loop) : false
     const handleVideoEnd = () => {
-        if (redirectOnComplete && navigate && navigateTo && !loop) {
+        if (redirectOnCompleteOrOnClick === 'onComplete' && navigate && navigateTo && !loop) {
             navigate(navigateTo);
         }
     };
+
+    const handleOnClick = () => {
+        if (redirectOnCompleteOrOnClick === 'onClick' && navigate && navigateTo) {
+            navigate(navigateTo);
+        }
+    }
 
     return (
         <>
@@ -89,6 +95,7 @@ export default function VideoComponent({
                     webkit-playsInline={true}
                     muted={true}
                     onEnded={handleVideoEnd}
+                    onClick={handleOnClick}
                 >
                 </video>
             </Flex>
