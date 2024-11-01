@@ -45,13 +45,38 @@ export default function ConfigurationViewer() {
 
   useEffect(() => {
     if (currentAnimation?.animationType && currentAnimation?.animationName) {
-
       playAnimation(currentAnimation.animationType, animations[currentAnimation.animationType][currentAnimation['animationName']], 'enter').then(() => {
         setRefreshCount(refreshCount + 1);
         setCurrentAnimation(null)
       });
     }
-  }, [params.pageIndex])
+  }, [params.pageIndex]);
+
+
+  useEffect(() => {
+    const animation = {'animationType': 'viewAnimations', 'animationName': 'opacity'};
+    let timeout = setTimeout(() => {
+      navigateToPage(animation)('home');
+    }, 60000);
+
+    const resetTimeout = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        navigateToPage(animation)('home');
+      }, 60000);
+    };
+
+    window.addEventListener('mousemove', resetTimeout);
+    window.addEventListener('keypress', resetTimeout);
+    window.removeEventListener('mousedown', resetTimeout);
+
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('mousemove', resetTimeout);
+      window.removeEventListener('keypress', resetTimeout);
+      window.removeEventListener('mousedown', resetTimeout);
+    };
+  }, [config]);
 
   const navigateToPage = (withAnimation) => (pageName, event) => {
     if(!config?.pages) return;
