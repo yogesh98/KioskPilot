@@ -10,7 +10,6 @@ import { animations } from "../components/Kiosk/animationMap"; // These are bein
 import RGL, { WidthProvider } from "react-grid-layout";
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-const IDLE_TIMEOUT = 1 * 60 * 1000;
 const ReactGridLayout = WidthProvider(RGL);
 
 export default function ConfigurationViewer() {
@@ -23,38 +22,6 @@ export default function ConfigurationViewer() {
   const [refreshCount, setRefreshCount] = useState(0);
   const navigate = useNavigate();
   const location = useLocation();
-  const [idleTimeout, setIdleTimeout] = useState(null);
-
-  const resetIdleTimeout = () => {
-    if (idleTimeout) clearTimeout(idleTimeout);
-    if(params.pageIndex === '0') return;
-
-    const animation = {
-      "animationName": "opacity",
-      "animationType": "viewAnimations",
-    }
-    setIdleTimeout(setTimeout(() => navigateToPage(animation)('home'), IDLE_TIMEOUT));
-  };
-
-  useEffect(() => {
-    resetIdleTimeout();
-
-    const handleUserActivity = () => resetIdleTimeout();
-    window.addEventListener("mousemove", handleUserActivity);
-    window.addEventListener("mousedown", handleUserActivity);
-    window.addEventListener("keydown", handleUserActivity);
-    window.addEventListener("touchstart", handleUserActivity);
-    window.addEventListener("touchmove", handleUserActivity);
-
-    return () => {
-      clearTimeout(idleTimeout);
-      window.removeEventListener("mousemove", handleUserActivity);
-      window.removeEventListener("mousedown", handleUserActivity);
-      window.removeEventListener("keydown", handleUserActivity);
-      window.removeEventListener("touchstart", handleUserActivity);
-      window.removeEventListener("touchmove", handleUserActivity);
-    };
-  }, [params.kioskId, navigate, params.pageIndex]);
 
   useEffect(() => {
     pbClient.collection('kiosks').getOne(params.kioskId).then((kiosk) => {
