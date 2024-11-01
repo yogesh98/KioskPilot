@@ -76,11 +76,13 @@ export default function ConfigurationViewer() {
       window.removeEventListener('keypress', resetTimeout);
       window.removeEventListener('mousedown', resetTimeout);
     };
-  }, [config]);
+  }, [config, params.pageIndex]);
 
   const navigateToPage = (withAnimation) => (pageName, event) => {
     if(!config?.pages) return;
     const index = config.pages.map(v => v.name).indexOf(pageName);
+    if(index === -1) return;
+    else if (index === params.pageIndex) return;
     let path = location.pathname.split('/');
     path.pop();
     if (withAnimation?.animationType && withAnimation?.animationName) {
