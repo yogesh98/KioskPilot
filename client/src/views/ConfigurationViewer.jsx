@@ -57,13 +57,13 @@ export default function ConfigurationViewer() {
     const animation = {'animationType': 'viewAnimations', 'animationName': 'opacity'};
     let timeout = setTimeout(() => {
       navigateToPage(animation)('home');
-    }, 60000);
+    }, 6000);
 
     const resetTimeout = () => {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
         navigateToPage(animation)('home');
-      }, 60000);
+      }, 6000);
     };
 
     window.addEventListener('mousemove', resetTimeout);
@@ -82,7 +82,7 @@ export default function ConfigurationViewer() {
     if(!config?.pages) return;
     const index = config.pages.map(v => v.name).indexOf(pageName);
     if(index === -1) return;
-    else if (index === params.pageIndex) return;
+    else if (index === parseInt(params.pageIndex)) return;
     let path = location.pathname.split('/');
     path.pop();
     if (withAnimation?.animationType && withAnimation?.animationName) {
