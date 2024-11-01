@@ -57,13 +57,13 @@ export default function ConfigurationViewer() {
     const animation = {'animationType': 'viewAnimations', 'animationName': 'opacity'};
     let timeout = setTimeout(() => {
       navigateToPage(animation)('home');
-    }, 6000);
+    }, 60000);
 
     const resetTimeout = () => {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
         navigateToPage(animation)('home');
-      }, 6000);
+      }, 60000);
     };
 
     window.addEventListener('mousemove', resetTimeout);
