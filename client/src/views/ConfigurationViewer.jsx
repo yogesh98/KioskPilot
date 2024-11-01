@@ -10,7 +10,7 @@ import { animations } from "../components/Kiosk/animationMap"; // These are bein
 import RGL, { WidthProvider } from "react-grid-layout";
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-const IDLE_TIMEOUT = 1 * 60 * 1000; // 5 minutes in milliseconds
+const IDLE_TIMEOUT = 1 * 60 * 1000;
 const ReactGridLayout = WidthProvider(RGL);
 
 export default function ConfigurationViewer() {
@@ -26,9 +26,8 @@ export default function ConfigurationViewer() {
   const [idleTimeout, setIdleTimeout] = useState(null);
 
   const resetIdleTimeout = () => {
-    console.log("hello");
-    if(params.pageIndex === '0') return;
     if (idleTimeout) clearTimeout(idleTimeout);
+    if(params.pageIndex === '0') return;
 
     const animation = {
       "animationName": "opacity",
@@ -88,6 +87,7 @@ export default function ConfigurationViewer() {
   }, [params.pageIndex])
 
   const navigateToPage = (withAnimation) => (pageName, event) => {
+    if(!config?.pages) return;
     const index = config.pages.map(v => v.name).indexOf(pageName);
     let path = location.pathname.split('/');
     path.pop();
