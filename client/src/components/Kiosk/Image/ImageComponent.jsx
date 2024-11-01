@@ -1,4 +1,5 @@
 import { Box, Flex } from "@chakra-ui/react";
+import { navigateToForm } from "../animationMap";
 
 export const propMap = {
     'selectedImage': {
@@ -46,10 +47,26 @@ export const propMap = {
             'repeat-y': 'Repeat Y',
         }
     },
+    'navigateTo': navigateToForm,
 };
 
-export default function ImageComponent({ scaleFactor, selectedImage, bgSize, bgPosition, bgRepeat }) {
+export default function ImageComponent({ 
+    scaleFactor, 
+    selectedImage, 
+    bgSize, 
+    bgPosition, 
+    bgRepeat,
+    navigateTo, //From Prop Form
+    navigate, //Passed from editor or viewer
+}) {
     const scaleFactorAsPercentage = (scaleFactor > 1 ? 1 : -1) * (scaleFactor * 100);
+
+    const handleOnClick = () => {
+        if (navigate && navigateTo) {
+            navigate(navigateTo);
+        }
+    }
+
     return (
         <>
             {
@@ -60,6 +77,7 @@ export default function ImageComponent({ scaleFactor, selectedImage, bgSize, bgP
                         h={'100%'}
                         bgPosition={bgPosition ? bgPosition : 'center'}
                         bgRepeat={bgRepeat ? bgRepeat : 'repeat'}
+                        onClick={handleOnClick}
                     >
 
                     </Box>
